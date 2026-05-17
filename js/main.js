@@ -50,7 +50,11 @@ class Main {
 
     testXhr() {
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", document.currentScript.src);
+        // 動態插入時 document.currentScript 常為 null，改以同源 js/main.js 探測 XHR。
+        const probeUrl =
+            (document.currentScript && document.currentScript.src) ||
+            new URL("js/main.js", document.baseURI).href;
+        xhr.open("GET", probeUrl);
         xhr.onload = () => (this.xhrSucceeded = true);
         xhr.send();
     }
