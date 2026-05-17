@@ -1,0 +1,188 @@
+body {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+#errorPrinter {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 640px;
+    height: 100px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    text-shadow: 1px 1px 3px #000;
+    font-size: 20px;
+    color: #fff;
+    z-index: 9;
+}
+#errorName {
+    color: #ff0;
+    font-weight: bold;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+#errorMessage {
+    color: #fff;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+#retryButton {
+    font-size: 20px;
+    color: #fff;
+    background-color: #000;
+    border-radius: 8px;
+    margin: 20px;
+    padding: 10px;
+}
+#fpsCounterBox {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 90px;
+    height: 40px;
+    background: #222;
+    opacity: 0.8;
+    z-index: 8;
+}
+#fpsCounterLabel {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 5px 10px;
+    height: 30px;
+    line-height: 32px;
+    font-size: 12px;
+    font-family: rmmz-numberfont, sans-serif;
+    color: #fff;
+    text-align: left;
+}
+#fpsCounterNumber {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 5px 10px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 24px;
+    font-family: rmmz-numberfont, monospace;
+    color: #fff;
+    text-align: right;
+}
+#loadingSpinner {
+    margin: auto;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 120px;
+    height: 120px;
+    z-index: 10;
+}
+#loadingSpinnerImage {
+    margin: 0px;
+    padding: 0px;
+    border-radius: 50%;
+    width: 96px;
+    height: 96px;
+    border: 12px solid rgba(255, 255, 255, 0.25);
+    border-top: 12px solid rgba(255, 255, 255, 1);
+    animation: fadein 2s ease, spin 1.5s linear infinite;
+}
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#schoolLoginGate {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #1a2744 0%, #050810 70%);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.school-login-card {
+    width: min(420px, 92vw);
+    padding: 1.5rem 1.75rem;
+    border-radius: 12px;
+    background: rgba(20, 28, 48, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e8ecf4;
+}
+.school-login-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-align: center;
+    color: #fff;
+}
+.school-login-hint {
+    margin: 0 0 0.65rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: #a8b4cc;
+}
+.school-login-hint.admin {
+    color: #c9b28a;
+}
+.school-login-label {
+    display: block;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: #8b98b3;
+}
+.school-login-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.55rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
+    font-size: 1rem;
+}
+.school-login-error {
+    margin: 0.75rem 0 0;
+    font-size: 0.85rem;
+    color: #ff8a8a;
+}
+.school-login-btn {
+    width: 100%;
+    margin-top: 1.1rem;
+    padding: 0.65rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: linear-gradient(180deg, #4a7cff, #2d5ae0);
+    color: #fff;
+}
+.school-login-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
