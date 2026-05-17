@@ -4,8 +4,8 @@
     "chromium-args": "--force-color-profile=srgb --disable-devtools",
     "window": {
         "title": "MATH-RPG-2026",
-        "width": 2732,
-        "height": 2048,
+        "width": 2048,
+        "height": 1536,
         "position": "center",
         "icon": "icon/icon.png"
     }

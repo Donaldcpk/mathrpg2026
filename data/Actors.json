@@ -1,6 +1,6 @@
 [
 null,
-{"id":1,"battlerName":"Actor1_1","characterIndex":0,"characterName":"Actor1","classId":1,"equips":[51,0,0,0,0],"faceIndex":0,"faceName":"Actor1","traits":[],"initialLevel":30,"maxLevel":99,"name":"悠真","nickname":"劍士","note":"","profile":""},
+{"id":1,"battlerName":"Actor1_1","characterIndex":0,"characterName":"Actor1","classId":1,"equips":[51,0,0,0,0],"faceIndex":0,"faceName":"Actor1","traits":[],"initialLevel":5,"maxLevel":99,"name":"悠真","nickname":"劍士","note":"","profile":""},
 {"id":2,"battlerName":"Actor1_1","characterIndex":0,"characterName":"Actor1","classId":2,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"Actor1","traits":[],"initialLevel":20,"maxLevel":40,"name":"悠真","nickname":"戰士","note":"","profile":""},
 {"id":3,"battlerName":"Actor1_1","characterIndex":0,"characterName":"Actor1","classId":3,"equips":[0,0,0,0,0,0],"faceIndex":0,"faceName":"Actor1","traits":[],"initialLevel":40,"maxLevel":60,"name":"悠真","nickname":"狂戰士","note":"","profile":""},
 {"id":4,"battlerName":"Actor1_1","characterIndex":0,"characterName":"Actor1","classId":4,"equips":[281,0,0,0,0],"faceIndex":0,"faceName":"Actor1","traits":[],"initialLevel":60,"maxLevel":99,"name":"悠真","nickname":"狂龍戰士","note":"","profile":"中學生，數學成績普通，樂觀吐槽，渴望回家，逐步成長為數學大師。前期抗拒數學之心與卡薩斯，第二章代數之王戰後重拾信念。\n"},
