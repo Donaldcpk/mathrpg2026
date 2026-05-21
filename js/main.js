@@ -23,6 +23,7 @@ class Main {
         this.xhrSucceeded = false;
         this.loadCount = 0;
         this.error = null;
+        this._windowLoadHandled = false;
     }
 
     run() {
@@ -85,6 +86,11 @@ class Main {
         }
         this.numScripts = scriptUrls.length;
         window.addEventListener("load", this.onWindowLoad.bind(this));
+        if (document.readyState === "complete") {
+            // school-auth-gate 在登入後才注入 main.js；此時 load 事件可能已結束。
+            // 若不補跑 onWindowLoad，遊戲會卡在 loading。
+            setTimeout(() => this.onWindowLoad(), 0);
+        }
         window.addEventListener("error", this.onWindowError.bind(this));
     }
 
@@ -127,6 +133,10 @@ class Main {
     }
 
     onWindowLoad() {
+        if (this._windowLoadHandled) {
+            return;
+        }
+        this._windowLoadHandled = true;
         if (!this.xhrSucceeded) {
             const message = "Your browser does not allow to read local files.";
             this.printError("Error", message);
