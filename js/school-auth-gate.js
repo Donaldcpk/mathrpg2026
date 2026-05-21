@@ -465,7 +465,8 @@
         d.innerHTML =
             '<motion style="max-width:420px;line-height:1.5">'.replace('motion', 'div') +
             '<h2 style="margin-top:0">缺少學校登入設定</h2>' +
-            '<p>請編輯 <code>js/school-auth-config.defaults.js</code>，填入 Supabase 網址與金鑰。</p>' +
+            '<p>請確認已載入 <code>js/school-auth-config.js</code>（含 Supabase 網址與 anon 金鑰）。' +
+            '本機管理員可另編輯 <code>js/school-auth-config.defaults.js</code> 覆寫。</p>' +
             '</div>';
         d.innerHTML = d.innerHTML.replace('<motion', '<div').replace('</motion>', '</div>');
         document.body.appendChild(d);
