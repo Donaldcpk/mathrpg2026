@@ -14,7 +14,11 @@
     function normalizeEmail(raw) {
         var s = String(raw || '').trim().toLowerCase();
         if (s === 'admin') {
-            return String(CFG.adminAuthEmail || '').toLowerCase();
+            var adminEm = String(CFG.adminAuthEmail || '').toLowerCase();
+            if (!adminEm) {
+                throw new Error('管理員登入尚未設定，請聯絡教師。');
+            }
+            return adminEm;
         }
         return s;
     }
@@ -269,7 +273,14 @@
 
         btn.addEventListener('click', async function () {
             showErr(errEl, '');
-            var email = normalizeEmail(em.value);
+            var email;
+            try {
+                email = normalizeEmail(em.value);
+            } catch (normErr) {
+                showErr(errEl, String(normErr.message || normErr));
+                btn.disabled = false;
+                return;
+            }
             var password = String(pw.value || '');
             if (!email || !password) {
                 showErr(errEl, '請輸入電郵與密碼。');

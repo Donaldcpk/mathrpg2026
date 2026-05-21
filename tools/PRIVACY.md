@@ -6,7 +6,8 @@
 |------|------------|
 | 學生名冊 | `tools/student_whitelist_rows.csv` |
 | 學生密碼表 | `tools/student_auth_passwords.csv` |
-| 真實登入設定 | `js/school-auth-config.defaults.js` |
+| 管理員電郵覆寫 | `js/school-auth-config.defaults.js`（可選；404 不影響學生） |
+| 基礎 Supabase anon | `js/school-auth-config.js`（與 plugins.js 相同，客户端本來可見） |
 | 真實名冊 SQL | `tools/supabase_seed_nwcs_players.sql` |
 | 管理密碼、舊班密碼 | 僅放環境變數或密碼管理器，**勿寫進程式碼** |
 | `service_role` 金鑰 | 僅本機 `export`，勿進 repo |
@@ -20,7 +21,7 @@
 
 ```bash
 cp js/school-auth-config.defaults.js.example js/school-auth-config.defaults.js
-# 編輯填入真實 URL／anon key／管理員電郵（檔案已在 .gitignore）
+# 編輯填入管理員電郵等覆寫（檔案已在 .gitignore；學生登入主要靠 school-auth-config.js）
 ```
 
 ## GitHub Pages 部署

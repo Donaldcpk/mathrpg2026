@@ -26,7 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Write school auth config from Secrets
+      - name: Write admin override config from Secrets (optional)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
@@ -34,12 +34,14 @@ jobs:
           ADMIN_EMAILS: ${{ secrets.ADMIN_EMAILS }}
           STUDENT_EMAIL_DOMAIN: ${{ secrets.STUDENT_EMAIL_DOMAIN }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
-            echo "::warning::未設定 SUPABASE_URL / SUPABASE_ANON_KEY，使用 .example（登入可能失敗）"
-            cp js/school-auth-config.defaults.js.example js/school-auth-config.defaults.js
-          else
+          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_ANON_KEY" ] && [ -n "$ADMIN_AUTH_EMAIL" ]; then
             node tools/write_school_auth_config.mjs
+            echo "已寫入 js/school-auth-config.defaults.js（管理員覆寫）"
+          else
+            echo "::notice::未設定完整 Secrets，略過 defaults.js（學生仍可用 js/school-auth-config.js 登入）"
+            rm -f js/school-auth-config.defaults.js
           fi
+          test -f js/school-auth-config.js || (echo "缺少 js/school-auth-config.js" && exit 1)
 
       - name: Upload Pages artifact（倉庫根 = 遊戲根）
         uses: actions/upload-pages-artifact@v3

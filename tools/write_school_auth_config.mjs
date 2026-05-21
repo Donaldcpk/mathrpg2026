@@ -29,8 +29,8 @@ if (!cfg.adminEmails) {
 }
 
 const body =
-    '/**\n * 由 tools/write_school_auth_config.mjs 產生；勿手動 commit。\n */\n' +
-    `window.SCHOOL_AUTH = ${JSON.stringify(cfg, null, 4)};\n`;
+    '/**\n * 由 tools/write_school_auth_config.mjs 產生；覆寫 school-auth-config.js；勿 commit。\n */\n' +
+    `window.SCHOOL_AUTH = Object.assign(window.SCHOOL_AUTH || {}, ${JSON.stringify(cfg, null, 4)});\n`;
 
 fs.writeFileSync(out, body, 'utf8');
 console.log('Wrote', out);
