@@ -398,11 +398,15 @@
             showConfigMissingOverlay();
             return;
         }
+        // GitHub Pages：一律先顯示登入，避免舊 session 直接載入 main 後卡住
+        var isPublicWeb = /github\.io$/i.test(String(location.hostname || ''));
         var allowAuto = false;
-        try {
-            allowAuto = sessionStorage.getItem('school_auth_ok') === '1';
-        } catch (e) {
-            /* ignore */
+        if (!isPublicWeb) {
+            try {
+                allowAuto = sessionStorage.getItem('school_auth_ok') === '1';
+            } catch (e) {
+                /* ignore */
+            }
         }
         var restored = false;
         if (allowAuto) {
