@@ -1,75 +1,39 @@
-# 學校登入與密碼（單一說明）
+# 學校登入與密碼（維護用，不含真實密碼）
 
-## 生日密碼「存在哪裡」？
+> **隱私：** 真實電郵、密碼、名冊 CSV 見 [PRIVACY.md](./PRIVACY.md)，勿 commit 到 Git。
 
-**不在 Git 專案裡。** 學生的生日密碼只會出現在：
+## 生日密碼存在哪裡？
 
-1. **Supabase → Authentication → Users**（每位學生註冊後的密碼雜湊）
-2. 校方 Excel **「第 2 欄：密碼」**（`generate_student_whitelist_sql.py` 註明僅供紙本，**不寫入**資料庫）
-3. 學生自己記住的出生年月日（8 碼，例 `20100315`）
+1. **Supabase → Authentication → Users**（雜湊，非明文）
+2. 校方 Excel 第 2 欄（僅紙本／匯出用，不進 Git）
+3. 學生首次登入時在畫面輸入 → 自動 signUp 寫入 Auth
 
-### 為何以前可以用生日登入？
+## 密碼規則（口頭向學生說明即可）
 
-遊戲 `js/school-auth-gate.js` 的流程：
+| 類型 | 電郵 | 密碼 |
+|------|------|------|
+| 學生 | `s########@你的學校網域` | 出生年月日 8 碼 |
+| 管理員 | 校方指定管理員電郵；畫面可輸入 `admin` | 校方指定（環境變數 `NWCS_ADMIN_PASSWORD`） |
+| 舊 nwcs 測試帳（可選） | `nwcs###@…` | 環境變數 `NWCS_LEGACY_PASSWORD` |
 
-1. 學生輸入 `s########@ngwahsec.edu.hk` + 8 碼生日  
-2. 若 Auth **尚無**此帳號 → 自動 **signUp**，密碼就是你輸入的生日  
-3. 名冊 `student_whitelist` 必須已有該電郵（否則觸發器會擋註冊）
-
-所以不必事先跑 provision，**首次登入即建立帳號**。  
-若後來改過密碼或跑過舊版 provision（`NWcs1965!`），就會對不上。
-
----
-
-## 密碼規則（請與學生／教師一致）
-
-| 帳號類型 | 電郵範例 | 密碼 |
-|----------|----------|------|
-| 學生 | `s1913588@ngwahsec.edu.hk` | **出生年月日 8 碼**（例 `20100315`） |
-| 管理員 | `admin@ngwahsec.edu.hk`、`nwcs211@ngwahsec.edu.hk`；畫面可輸入 `admin` | **`NgW@h2526!`** |
-| 舊測試帳（可選） | `nwcs003@…`～`nwcs244@`（不含 211） | **`NWcs1965!`** |
-
-名冊 CSV：`student_whitelist_rows.csv`（`is_admin=true` 只有 `admin@` 與 `nwcs211@`）。
-
----
-
-## 工具指令
-
-### 1. 名冊已在 Supabase 時
+## Provision（本機 only）
 
 ```bash
-export SUPABASE_URL="https://oqsvxizemgyfointylpe.supabase.co"
-export SUPABASE_SERVICE_ROLE_KEY="你的_service_role"
+export SUPABASE_URL="https://YOUR_PROJECT.supabase.co"
+export SUPABASE_SERVICE_ROLE_KEY="（secret，勿 commit）"
+export NWCS_ADMIN_PASSWORD="（管理密碼）"
+export NWCS_ADMIN_EMAILS="admin@…,teacher@…"   # 逗號分隔，與名冊 is_admin 一致
 
-# 管理員（建議必跑）
+cp ~/Downloads/student_whitelist_rows.csv tools/   # 勿 push
+
 node tools/provision_supabase_auth_users.mjs --admins-only
-
-# 舊 nwcs 測試帳（可選）
-node tools/provision_supabase_auth_users.mjs --include-legacy-nwcs
 ```
 
-### 2. 從 Excel 匯出學生密碼 CSV 再批次建立
-
-```bash
-python3 tools/generate_student_whitelist_sql.py \
-  --passwords-out tools/student_auth_passwords.csv \
-  "/路徑/STD AC.xlsx"
-
-node tools/provision_supabase_auth_users.mjs --students \
-  --passwords-csv tools/student_auth_passwords.csv
-```
-
-### 3. 複製名冊到 tools（可選）
-
-```bash
-cp ~/Downloads/student_whitelist_rows.csv tools/student_whitelist_rows.csv
-```
-
----
+學生批次：`--students --passwords-csv tools/student_auth_passwords.csv`（該 CSV 亦勿 commit）。
 
 ## 登入畫面
 
-- 學生：`s########@ngwahsec.edu.hk` + 8 碼生日  
-- 管理員：電郵輸入 `admin` 或完整管理員電郵 + 管理密碼  
+- 學生：學校派發的 `s########@…` + 8 碼生日  
+- 管理員：輸入 `admin` + 管理密碼  
 
-設定檔：`js/school-auth-config.defaults.js`（勿 commit service_role）。
+設定檔：`js/school-auth-config.defaults.js`（本機複製自 `.example`，已 gitignore）。

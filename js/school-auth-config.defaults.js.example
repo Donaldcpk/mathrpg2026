@@ -1,0 +1,13 @@
+/**
+ * 複製為 school-auth-config.defaults.js（該檔已 .gitignore，勿 commit）。
+ * GitHub Pages：在 repo Secrets 設定 SUPABASE_URL、SUPABASE_ANON_KEY、ADMIN_AUTH_EMAIL、ADMIN_EMAILS。
+ */
+window.SCHOOL_AUTH = {
+    supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
+    supabaseAnonKey: 'YOUR_SUPABASE_ANON_KEY',
+    adminAuthEmail: 'admin@your-school.edu.hk',
+    adminEmails: ['admin@your-school.edu.hk'],
+    studentEmailDomain: 'your-school.edu.hk',
+    storagePrefix: 'school_sb_',
+    skipGateOnNwjs: true
+};

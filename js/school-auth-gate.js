@@ -14,7 +14,7 @@
     function normalizeEmail(raw) {
         var s = String(raw || '').trim().toLowerCase();
         if (s === 'admin') {
-            return String(CFG.adminAuthEmail || 'admin@ngwahsec.edu.hk').toLowerCase();
+            return String(CFG.adminAuthEmail || '').toLowerCase();
         }
         return s;
     }
@@ -226,10 +226,10 @@
         gate.innerHTML =
             '<div class="school-login-card">' +
             '<h1 class="school-login-title">TSA Training</h1>' +
-            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（例：<code>s2013677@ngwahsec.edu.hk</code>，與校方派發相同）。<br>密碼為<strong>出生年月日</strong>共 8 碼，例 <code>20100315</code>。</p>' +
-            '<p class="school-login-hint admin">管理員：電郵欄輸入 <code>admin</code>，使用管理密碼。</p>' +
+            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（與校方派發相同，例：<code>s########@學校網域</code>）。<br>密碼為<strong>出生年月日</strong>共 8 碼（例：<code>YYYYMMDD</code>）。</p>' +
+            '<p class="school-login-hint admin">管理員：電郵欄輸入 <code>admin</code>，使用校方提供之管理密碼。</p>' +
             '<label class="school-login-label">電郵</label>' +
-            '<input type="email" id="schoolLoginEmail" class="school-login-input" autocomplete="username" placeholder="s2013677@ngwahsec.edu.hk" />' +
+            '<input type="email" id="schoolLoginEmail" class="school-login-input" autocomplete="username" placeholder="s########@school.edu.hk" />' +
             '<label class="school-login-label">密碼（8 碼生日）</label>' +
             '<input type="password" id="schoolLoginPassword" class="school-login-input" autocomplete="current-password" />' +
             '<p id="schoolLoginError" class="school-login-error" style="display:none"></p>' +

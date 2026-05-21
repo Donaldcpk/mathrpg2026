@@ -26,6 +26,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Write school auth config from Secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          ADMIN_AUTH_EMAIL: ${{ secrets.ADMIN_AUTH_EMAIL }}
+          ADMIN_EMAILS: ${{ secrets.ADMIN_EMAILS }}
+          STUDENT_EMAIL_DOMAIN: ${{ secrets.STUDENT_EMAIL_DOMAIN }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::warning::未設定 SUPABASE_URL / SUPABASE_ANON_KEY，使用 .example（登入可能失敗）"
+            cp js/school-auth-config.defaults.js.example js/school-auth-config.defaults.js
+          else
+            node tools/write_school_auth_config.mjs
+          fi
+
       - name: Upload Pages artifact（倉庫根 = 遊戲根）
         uses: actions/upload-pages-artifact@v3
         with:

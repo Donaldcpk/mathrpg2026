@@ -1,0 +1,10 @@
+-- 範例：請用校方名冊在本機產生 SQL，勿將真實學生電郵 commit 到 Git。
+-- 見 generate_student_whitelist_sql.py 或從 Supabase 匯出的 CSV。
+
+INSERT INTO public.student_whitelist (email, seat_code, earth_ref, is_admin) VALUES
+  ('student001@example.edu.hk', '001', '1A1', false),
+  ('teacher-admin@example.edu.hk', 'ADM', '教師', true)
+ON CONFLICT (email) DO UPDATE SET
+  seat_code = EXCLUDED.seat_code,
+  earth_ref = EXCLUDED.earth_ref,
+  is_admin = EXCLUDED.is_admin;

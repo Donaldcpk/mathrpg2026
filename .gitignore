@@ -4,6 +4,8 @@
 *.bak-radar
 js/plugins/*.bak-*
 
-# 學校名冊／密碼表（含個資，僅放本機 tools/）
+# 學校名冊／密碼／登入設定（含個資，僅本機）
 tools/student_whitelist_rows.csv
 tools/student_auth_passwords.csv
+js/school-auth-config.defaults.js
+tools/supabase_seed_nwcs_players.sql

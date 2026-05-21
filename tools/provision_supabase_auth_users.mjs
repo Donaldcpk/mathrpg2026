@@ -4,8 +4,8 @@
  *
  * 密碼規則（與校方約定一致）：
  *   - s########@… 學生：出生年月日 8 碼（須另有密碼表，或讓學生首次登入自動註冊）
- *   - admin@、nwcs211@、is_admin=true：NWCS_ADMIN_PASSWORD（預設 NgW@h2526!）
- *   - 其餘 nwcs###@（舊測試帳，非 admin）：NWCS_LEGACY_PASSWORD（預設 NWcs1965!）
+ *   - is_admin=true：NWCS_ADMIN_PASSWORD（必填，勿寫入 Git）
+ *   - 其餘 nwcs###@（舊測試帳）：NWCS_LEGACY_PASSWORD（必填時用 --include-legacy-nwcs）
  *
  * 用法：
  *   export SUPABASE_URL="https://xxx.supabase.co"
@@ -35,13 +35,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const BASE = (process.env.SUPABASE_URL || '').replace(/\/+$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-const ADMIN_PASSWORD = process.env.NWCS_ADMIN_PASSWORD || 'NgW@h2526!';
-const LEGACY_PASSWORD = process.env.NWCS_LEGACY_PASSWORD || 'NWcs1965!';
+const ADMIN_PASSWORD = process.env.NWCS_ADMIN_PASSWORD || '';
+const LEGACY_PASSWORD = process.env.NWCS_LEGACY_PASSWORD || '';
 const PROVISION_MODE = (process.env.NWCS_PROVISION_MODE || 'create_only').toLowerCase();
 const OVERWRITE_EXISTING = PROVISION_MODE === 'upsert';
 
 const ADMIN_EMAILS = new Set(
-    ['admin@ngwahsec.edu.hk', 'nwcs211@ngwahsec.edu.hk'].map(e => e.toLowerCase())
+    (process.env.NWCS_ADMIN_EMAILS || '')
+        .split(',')
+        .map(e => e.trim().toLowerCase())
+        .filter(Boolean)
 );
 
 function parseArgs(argv) {
@@ -212,6 +215,17 @@ function validateServiceKey() {
     }
 }
 
+function requirePasswords(args) {
+    if ((args.adminsOnly || args.includeLegacyNwcs) && !ADMIN_PASSWORD) {
+        console.error('請設定 NWCS_ADMIN_PASSWORD（勿寫入 Git）');
+        process.exit(1);
+    }
+    if (args.includeLegacyNwcs && !LEGACY_PASSWORD) {
+        console.error('請設定 NWCS_LEGACY_PASSWORD');
+        process.exit(1);
+    }
+}
+
 async function main() {
     const args = parseArgs(process.argv);
     if (!BASE || !SERVICE_KEY) {
@@ -219,6 +233,7 @@ async function main() {
         process.exit(1);
     }
     validateServiceKey();
+    requirePasswords(args);
 
     if (!fs.existsSync(args.whitelistCsv)) {
         console.error('找不到名冊 CSV：', args.whitelistCsv);
