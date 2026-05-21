@@ -24,6 +24,7 @@ class Main {
         this.loadCount = 0;
         this.error = null;
         this._windowLoadHandled = false;
+        this._pageLoadObserved = document.readyState === "complete";
     }
 
     run() {
@@ -85,11 +86,12 @@ class Main {
             document.body.appendChild(script);
         }
         this.numScripts = scriptUrls.length;
-        window.addEventListener("load", this.onWindowLoad.bind(this));
+        window.addEventListener("load", () => {
+            this._pageLoadObserved = true;
+            this.onWindowLoad();
+        });
         if (document.readyState === "complete") {
-            // school-auth-gate 在登入後才注入 main.js；此時 load 事件可能已結束。
-            // 若不補跑 onWindowLoad，遊戲會卡在 loading。
-            setTimeout(() => this.onWindowLoad(), 0);
+            this._pageLoadObserved = true;
         }
         window.addEventListener("error", this.onWindowError.bind(this));
     }
@@ -104,6 +106,9 @@ class Main {
                 PluginManager.setup($plugins);
             } catch (e) {
                 this.printError("Plugin setup failed", String(e && e.message ? e.message : e));
+            }
+            if (this._pageLoadObserved) {
+                this.onWindowLoad();
             }
         }
     }
@@ -134,6 +139,9 @@ class Main {
 
     onWindowLoad() {
         if (this._windowLoadHandled) {
+            return;
+        }
+        if (this.loadCount < this.numScripts) {
             return;
         }
         this._windowLoadHandled = true;
