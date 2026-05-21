@@ -30,6 +30,14 @@ class Main {
         this.testXhr();
         this.hookNwjsClose();
         this.loadMainScripts();
+        this._loadWatchdog = setTimeout(() => {
+            if (this.loadCount < this.numScripts) {
+                this.printError(
+                    "載入逾時",
+                    "請按「返回登入畫面」或清除瀏覽器快取後重試（題庫約 2MB，首次較慢）。"
+                );
+            }
+        }, 120000);
     }
 
     showLoadingSpinner() {
@@ -82,7 +90,15 @@ class Main {
 
     onScriptLoad() {
         if (++this.loadCount === this.numScripts) {
-            PluginManager.setup($plugins);
+            if (this._loadWatchdog) {
+                clearTimeout(this._loadWatchdog);
+                this._loadWatchdog = null;
+            }
+            try {
+                PluginManager.setup($plugins);
+            } catch (e) {
+                this.printError("Plugin setup failed", String(e && e.message ? e.message : e));
+            }
         }
     }
 
@@ -146,6 +162,10 @@ class Main {
     }
 
     onEffekseerLoad() {
+        if (this._loadWatchdog) {
+            clearTimeout(this._loadWatchdog);
+            this._loadWatchdog = null;
+        }
         this.eraseLoadingSpinner();
         SceneManager.run(Scene_Boot);
     }

@@ -219,8 +219,24 @@
         el.style.cssText =
             'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;' +
             'color:#ccc;font:14px/1.4 system-ui,sans-serif;text-align:center;max-width:90%;';
-        el.textContent = '正在載入遊戲（題庫較大，首次約需 30–60 秒）…';
+        el.innerHTML =
+            '正在載入遊戲（題庫較大，首次約需 30–60 秒）…<br>' +
+            '<button type="button" id="schoolResetAuthBtn" style="margin-top:8px;padding:6px 12px;cursor:pointer;">' +
+            '卡住？返回登入畫面</button>';
         document.body.appendChild(el);
+        var resetBtn = document.getElementById('schoolResetAuthBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function () {
+                try {
+                    sessionStorage.removeItem('school_auth_ok');
+                } catch (e) {
+                    /* ignore */
+                }
+                window.SCHOOL_AUTH_clearSession();
+                window.__nwcsMainLoaded = false;
+                location.reload();
+            });
+        }
     }
 
     function loadMainGame() {
@@ -323,6 +339,11 @@
                 }
                 applySession(data);
                 await fetchSeatCode(data.access_token);
+                try {
+                    sessionStorage.setItem('school_auth_ok', '1');
+                } catch (e) {
+                    /* ignore */
+                }
                 notifyLoginSuccess();
                 hideGate();
                 loadMainGame();
@@ -377,15 +398,23 @@
             showConfigMissingOverlay();
             return;
         }
-        var restored = await tryRestoreSession();
+        var allowAuto = false;
+        try {
+            allowAuto = sessionStorage.getItem('school_auth_ok') === '1';
+        } catch (e) {
+            /* ignore */
+        }
+        var restored = false;
+        if (allowAuto) {
+            restored = await tryRestoreSession();
+        }
         if (restored) {
-            loadMainGame();
-            if (
-                window.NWCS_CloudSaveManager &&
-                typeof window.NWCS_CloudSaveManager.scheduleSyncAfterAuth === 'function'
-            ) {
-                window.NWCS_CloudSaveManager.scheduleSyncAfterAuth();
+            try {
+                sessionStorage.setItem('school_auth_ok', '1');
+            } catch (e) {
+                /* ignore */
             }
+            loadMainGame();
             return;
         }
         buildGate();

@@ -562,10 +562,10 @@
 
     const _Scene_Boot_start = Scene_Boot.prototype.start;
     Scene_Boot.prototype.start = function () {
-        const boot = this;
-        withSyncTimeout(NWCS_CloudSaveManager.runSync(), 12000, 'Scene_Boot').finally(() => {
-            _Scene_Boot_start.call(boot);
-        });
+        _Scene_Boot_start.call(this);
+        if (NWCS_CloudSaveManager.isLoggedIn()) {
+            withSyncTimeout(NWCS_CloudSaveManager.runSync(), 12000, 'background').catch(() => {});
+        }
     };
 
     const _DataManager_saveGame = DataManager.saveGame;
@@ -586,6 +586,12 @@
     const _Scene_Title_start = Scene_Title.prototype.start;
     Scene_Title.prototype.start = function () {
         _Scene_Title_start.call(this);
+        if (
+            NWCS_CloudSaveManager.isLoggedIn() &&
+            typeof NWCS_CloudSaveManager.scheduleSyncAfterAuth === 'function'
+        ) {
+            NWCS_CloudSaveManager.scheduleSyncAfterAuth();
+        }
         try {
             const msg = localStorage.getItem('nwcs_cloud_sync_msg');
             const level = localStorage.getItem('nwcs_cloud_sync_level') || 'info';
