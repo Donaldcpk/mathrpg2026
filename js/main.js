@@ -185,6 +185,7 @@ class Main {
             this._loadWatchdog = null;
         }
         this.eraseLoadingSpinner();
+        window.dispatchEvent(new CustomEvent("nwcs-game-ready"));
         SceneManager.run(Scene_Boot);
     }
 

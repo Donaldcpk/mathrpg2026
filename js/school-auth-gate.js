@@ -348,10 +348,24 @@
         }
     }
 
+    function hideGameLoadingHint() {
+        var el = document.getElementById('schoolGameLoadingHint');
+        if (el && el.parentNode) {
+            el.parentNode.removeChild(el);
+        }
+    }
+
     function loadMainGame() {
         if (window.__nwcsMainLoaded) return;
         window.__nwcsMainLoaded = true;
         showGameLoadingHint();
+        window.addEventListener(
+            'nwcs-game-ready',
+            function () {
+                hideGameLoadingHint();
+            },
+            { once: true }
+        );
         var s = document.createElement('script');
         s.src = 'js/main.js';
         s.defer = true;
