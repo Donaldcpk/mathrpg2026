@@ -226,10 +226,10 @@
         gate.innerHTML =
             '<div class="school-login-card">' +
             '<h1 class="school-login-title">TSA Training</h1>' +
-            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（例：<code>nwcs003@ngwahsec.edu.hk</code>）。<br>學生密碼：<strong>NWcs1965!</strong>（全班相同）。</p>' +
-            '<p class="school-login-hint admin">管理員：<code>nwcs211@ngwahsec.edu.hk</code> 或輸入 <code>admin</code>，使用管理密碼。</p>' +
+            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（格式：<code>sXXXXXXX@ngwahsec.edu.hk</code>，<code>XXXXXXX</code> 為你的學號數字）。<br>密碼為你的<strong>出生年月日</strong>（8 位數字，例：<code>19980101</code>）。</p>' +
+            '<p class="school-login-hint admin">教師／管理員請使用校方提供的專用帳號與密碼登入。</p>' +
             '<label class="school-login-label">電郵</label>' +
-            '<input type="email" id="schoolLoginEmail" class="school-login-input" autocomplete="username" />' +
+            '<input type="email" id="schoolLoginEmail" class="school-login-input" autocomplete="username" placeholder="s1234567@ngwahsec.edu.hk" />' +
             '<label class="school-login-label">密碼</label>' +
             '<input type="password" id="schoolLoginPassword" class="school-login-input" autocomplete="current-password" />' +
             '<p id="schoolLoginError" class="school-login-error" style="display:none"></p>' +
@@ -275,7 +275,7 @@
                         var msg2 = String(e2.message || e2 || '').toLowerCase();
                         if (msg2.indexOf('already') >= 0 || msg2.indexOf('registered') >= 0) {
                             throw new Error(
-                                '此電郵已註冊，請確認密碼（學生：NWcs1965!；管理員用管理密碼）。'
+                                '此電郵已註冊，請確認密碼是否為你的出生年月日（8 位數字，例：19980101）。'
                             );
                         }
                         throw new Error(
