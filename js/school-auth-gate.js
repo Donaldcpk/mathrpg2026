@@ -178,15 +178,27 @@
         return data;
     }
 
+    function withTimeout(promise, ms) {
+        return Promise.race([
+            promise,
+            new Promise(function (_, reject) {
+                setTimeout(function () {
+                    reject(new Error('session_restore_timeout'));
+                }, ms);
+            })
+        ]);
+    }
+
     async function tryRestoreSession() {
         try {
             var rt = localStorage.getItem(storageKey('rt'));
             if (!rt) return false;
-            var data = await refreshSession(rt);
+            var data = await withTimeout(refreshSession(rt), 8000);
             if (data.access_token) {
                 applySession(data);
-                await fetchSeatCode(data.access_token);
-                notifyLoginSuccess();
+                await withTimeout(fetchSeatCode(data.access_token), 5000).catch(function () {
+                    /* 座位資料非必須 */
+                });
                 return true;
             }
         } catch (e) {
@@ -195,9 +207,22 @@
         return false;
     }
 
+    function showGameLoadingHint() {
+        if (document.getElementById('schoolGameLoadingHint')) return;
+        var el = document.createElement('div');
+        el.id = 'schoolGameLoadingHint';
+        el.setAttribute('role', 'status');
+        el.style.cssText =
+            'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;' +
+            'color:#ccc;font:14px/1.4 system-ui,sans-serif;text-align:center;max-width:90%;';
+        el.textContent = '正在載入遊戲（題庫較大，首次約需 30–60 秒）…';
+        document.body.appendChild(el);
+    }
+
     function loadMainGame() {
         if (window.__nwcsMainLoaded) return;
         window.__nwcsMainLoaded = true;
+        showGameLoadingHint();
         var s = document.createElement('script');
         s.src = 'js/main.js';
         s.defer = true;
@@ -344,6 +369,12 @@
         var restored = await tryRestoreSession();
         if (restored) {
             loadMainGame();
+            if (
+                window.NWCS_CloudSaveManager &&
+                typeof window.NWCS_CloudSaveManager.scheduleSyncAfterAuth === 'function'
+            ) {
+                window.NWCS_CloudSaveManager.scheduleSyncAfterAuth();
+            }
             return;
         }
         buildGate();

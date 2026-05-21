@@ -126,6 +126,18 @@
         }
     }
 
+    function withSyncTimeout(promise, ms, label) {
+        return Promise.race([
+            promise,
+            new Promise(resolve => {
+                setTimeout(() => {
+                    console.warn('[NWCS_CloudSave] 逾時略過：', label);
+                    resolve({ action: 'timeout' });
+                }, ms);
+            })
+        ]);
+    }
+
     class NWCS_CloudSaveManager {
         static get lastSyncResult() {
             return this._lastSyncResult || { action: 'none' };
@@ -551,7 +563,7 @@
     const _Scene_Boot_start = Scene_Boot.prototype.start;
     Scene_Boot.prototype.start = function () {
         const boot = this;
-        NWCS_CloudSaveManager.runSync().finally(() => {
+        withSyncTimeout(NWCS_CloudSaveManager.runSync(), 12000, 'Scene_Boot').finally(() => {
             _Scene_Boot_start.call(boot);
         });
     };
