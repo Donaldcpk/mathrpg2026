@@ -59,9 +59,15 @@ class Main {
     }
 
     testXhr() {
+        const currentScript = document.currentScript;
+        const probeUrl =
+            currentScript && currentScript.src
+                ? currentScript.src
+                : "js/main.js";
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", document.currentScript.src);
+        xhr.open("GET", probeUrl);
         xhr.onload = () => (this.xhrSucceeded = true);
+        xhr.onerror = () => (this.xhrSucceeded = false);
         xhr.send();
     }
 
