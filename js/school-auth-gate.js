@@ -16,6 +16,11 @@
         if (s === 'admin') {
             return String(CFG.adminAuthEmail || 'nwcs211@ngwahsec.edu.hk').toLowerCase();
         }
+        // s003@… → nwcs003@…（與 Supabase 名冊 nwcs 格式對齊）
+        var shortS = s.match(/^s(\d{1,3})@ngwahsec\.edu\.hk$/);
+        if (shortS) {
+            return ('nwcs' + shortS[1].padStart(3, '0') + '@ngwahsec.edu.hk').toLowerCase();
+        }
         return s;
     }
 
@@ -226,7 +231,7 @@
         gate.innerHTML =
             '<div class="school-login-card">' +
             '<h1 class="school-login-title">TSA Training</h1>' +
-            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（格式：<code>sXXXXXXX@ngwahsec.edu.hk</code>，<code>XXXXXXX</code> 為你的學號數字）。<br>密碼為你的<strong>出生年月日</strong>（8 位數字，例：<code>19980101</code>）。</p>' +
+            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（例：<code>nwcs003@ngwahsec.edu.hk</code> 或 <code>s003@ngwahsec.edu.hk</code>，數字為你的座號／學號）。<br>密碼為你的<strong>出生年月日</strong>（8 位數字，例：<code>19980101</code>）。</p>' +
             '<p class="school-login-hint admin">教師／管理員請使用校方提供的專用帳號與密碼登入。</p>' +
             '<label class="school-login-label">電郵</label>' +
             '<input type="email" id="schoolLoginEmail" class="school-login-input" autocomplete="username" placeholder="s1234567@ngwahsec.edu.hk" />' +
