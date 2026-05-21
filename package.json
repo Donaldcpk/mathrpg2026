@@ -3,9 +3,9 @@
     "main": "index.html",
     "chromium-args": "--force-color-profile=srgb --disable-devtools",
     "window": {
-        "title": " ",
-        "width": 2732,
-        "height": 2048,
+        "title": "潛行數界傳奇",
+        "width": 1024,
+        "height": 768,
         "position": "center",
         "icon": "icon/icon.png"
     }
