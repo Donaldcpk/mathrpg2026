@@ -1,35 +1,143 @@
 #!/usr/bin/env node
 /**
- * 在 Supabase Auth 建立／更新學生與管理員帳號（需 service_role，勿 commit 金鑰）。
+ * 依名冊 CSV 建立／更新 Supabase Auth 帳號（需 service_role）。
+ *
+ * 密碼規則（與校方約定一致）：
+ *   - s########@… 學生：出生年月日 8 碼（須另有密碼表，或讓學生首次登入自動註冊）
+ *   - admin@、nwcs211@、is_admin=true：NWCS_ADMIN_PASSWORD（預設 NgW@h2526!）
+ *   - 其餘 nwcs###@（舊測試帳，非 admin）：NWCS_LEGACY_PASSWORD（預設 NWcs1965!）
  *
  * 用法：
- *   export SUPABASE_URL="https://oqsvxizemgyfointylpe.supabase.co"
- *   export SUPABASE_SERVICE_ROLE_KEY="你的_service_role"
- *   node tools/provision_supabase_auth_users.mjs
+ *   export SUPABASE_URL="https://xxx.supabase.co"
+ *   export SUPABASE_SERVICE_ROLE_KEY="sb_secret_..."
  *
- * 可選環境變數：
- *   NWCS_STUDENT_PASSWORD、NWCS_ADMIN_PASSWORD
- *   NWCS_PROVISION_MODE=create_only（預設，不覆蓋舊帳密碼）
- *   NWCS_PROVISION_MODE=upsert（會把名單內既有帳號密碼改為統一密碼，慎用）
+ *   # 只建立／更新管理員
+ *   node tools/provision_supabase_auth_users.mjs --admins-only
+ *
+ *   # 管理員 + 80 個舊 nwcs 測試帳（NWcs1965!）
+ *   node tools/provision_supabase_auth_users.mjs --include-legacy-nwcs
+ *
+ *   # 學生（需密碼 CSV：email,password 或 學生電郵,密碼）
+ *   node tools/provision_supabase_auth_users.mjs --students \
+ *     --passwords-csv "/path/student_passwords.csv"
+ *
+ *   # 自訂名冊路徑
+ *   node tools/provision_supabase_auth_users.mjs --whitelist-csv "./tools/student_whitelist_rows.csv" --admins-only
+ *
+ * 環境變數：
+ *   NWCS_ADMIN_PASSWORD、NWCS_LEGACY_PASSWORD、NWCS_PROVISION_MODE=create_only|upsert
  */
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const BASE = (process.env.SUPABASE_URL || '').replace(/\/+$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-const STUDENT_PASSWORD = process.env.NWCS_STUDENT_PASSWORD || 'NWcs1965!';
-const ADMIN_EMAIL = 'nwcs211@ngwahsec.edu.hk';
 const ADMIN_PASSWORD = process.env.NWCS_ADMIN_PASSWORD || 'NgW@h2526!';
+const LEGACY_PASSWORD = process.env.NWCS_LEGACY_PASSWORD || 'NWcs1965!';
 const PROVISION_MODE = (process.env.NWCS_PROVISION_MODE || 'create_only').toLowerCase();
 const OVERWRITE_EXISTING = PROVISION_MODE === 'upsert';
 
-const STUDENT_IDS = `nwcs003 nwcs004 nwcs017 nwcs020 nwcs022 nwcs025 nwcs032 nwcs037 nwcs039 nwcs049 nwcs067 nwcs072 nwcs073 nwcs074 nwcs078 nwcs084 nwcs085 nwcs086 nwcs088 nwcs090 nwcs091 nwcs092 nwcs102 nwcs103 nwcs112 nwcs114 nwcs120 nwcs128 nwcs129 nwcs134 nwcs135 nwcs137 nwcs138 nwcs140 nwcs141 nwcs143 nwcs152 nwcs153 nwcs161 nwcs176 nwcs181 nwcs183 nwcs186 nwcs188 nwcs191 nwcs195 nwcs196 nwcs198 nwcs202 nwcs203 nwcs204 nwcs205 nwcs206 nwcs208 nwcs209 nwcs210 nwcs211 nwcs213 nwcs214 nwcs217 nwcs218 nwcs219 nwcs220 nwcs221 nwcs222 nwcs224 nwcs227 nwcs228 nwcs230 nwcs235 nwcs234 nwcs233 nwcs236 nwcs237 nwcs238 nwcs239 nwcs240 nwcs241 nwcs242 nwcs243 nwcs244`
-    .split(/\s+/)
-    .filter(Boolean);
+const ADMIN_EMAILS = new Set(
+    ['admin@ngwahsec.edu.hk', 'nwcs211@ngwahsec.edu.hk'].map(e => e.toLowerCase())
+);
 
-function studentEmails() {
-    return STUDENT_IDS.map(id => `${id}@ngwahsec.edu.hk`);
+function parseArgs(argv) {
+    const out = {
+        whitelistCsv: path.join(__dirname, 'student_whitelist_rows.csv'),
+        passwordsCsv: '',
+        adminsOnly: false,
+        includeLegacyNwcs: false,
+        students: false
+    };
+    for (let i = 2; i < argv.length; i++) {
+        const a = argv[i];
+        if (a === '--admins-only') out.adminsOnly = true;
+        else if (a === '--include-legacy-nwcs') out.includeLegacyNwcs = true;
+        else if (a === '--students') out.students = true;
+        else if (a === '--whitelist-csv' && argv[i + 1]) out.whitelistCsv = argv[++i];
+        else if (a === '--passwords-csv' && argv[i + 1]) out.passwordsCsv = argv[++i];
+    }
+    if (!out.adminsOnly && !out.includeLegacyNwcs && !out.students) {
+        out.adminsOnly = true;
+    }
+    return out;
 }
 
-async function adminFetch(path, options = {}) {
-    const url = `${BASE}${path}`;
+function parseCsvLine(line) {
+    const cells = [];
+    let cur = '';
+    let inQ = false;
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+            inQ = !inQ;
+            continue;
+        }
+        if (ch === ',' && !inQ) {
+            cells.push(cur.trim());
+            cur = '';
+            continue;
+        }
+        cur += ch;
+    }
+    cells.push(cur.trim());
+    return cells;
+}
+
+function readWhitelistCsv(filePath) {
+    const text = fs.readFileSync(filePath, 'utf8');
+    const lines = text.split(/\r?\n/).filter(Boolean);
+    if (!lines.length) return [];
+    const header = parseCsvLine(lines[0]).map(h => h.toLowerCase());
+    const emailIdx = header.indexOf('email');
+    const adminIdx = header.indexOf('is_admin');
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+        const c = parseCsvLine(lines[i]);
+        const email = (c[emailIdx] || '').trim().toLowerCase();
+        if (!email || !email.includes('@')) continue;
+        const isAdmin =
+            (c[adminIdx] || '').toLowerCase() === 'true' || ADMIN_EMAILS.has(email);
+        rows.push({ email, isAdmin });
+    }
+    return rows;
+}
+
+function readPasswordsCsv(filePath) {
+    const text = fs.readFileSync(filePath, 'utf8');
+    const lines = text.split(/\r?\n/).filter(Boolean);
+    const map = new Map();
+    for (let i = 0; i < lines.length; i++) {
+        const c = parseCsvLine(lines[i]);
+        if (c.length < 2) continue;
+        const h0 = (c[0] || '').toLowerCase();
+        if (i === 0 && (h0 === 'email' || h0.includes('電郵') || h0.includes('學生'))) continue;
+        const email = (c[0] || '').trim().toLowerCase();
+        const password = String(c[1] || '').trim();
+        if (email && password) map.set(email, password);
+    }
+    return map;
+}
+
+function accountKind(email, isAdmin) {
+    if (isAdmin || ADMIN_EMAILS.has(email)) return 'admin';
+    if (/^s\d+@ngwahsec\.edu\.hk$/i.test(email)) return 'student';
+    if (/^nwcs\d+@ngwahsec\.edu\.hk$/i.test(email)) return 'legacy_nwcs';
+    return 'other';
+}
+
+function shouldProvision(row, kind, args) {
+    if (kind === 'admin') return args.adminsOnly || args.includeLegacyNwcs || args.students;
+    if (kind === 'legacy_nwcs') return args.includeLegacyNwcs;
+    if (kind === 'student') return args.students;
+    return false;
+}
+
+async function adminFetch(pathname, options = {}) {
+    const url = `${BASE}${pathname}`;
     const res = await fetch(url, {
         ...options,
         headers: {
@@ -64,11 +172,7 @@ async function findUserByEmail(email) {
 async function createUser(email, password) {
     const { res, data } = await adminFetch('/auth/v1/admin/users', {
         method: 'POST',
-        body: JSON.stringify({
-            email,
-            password,
-            email_confirm: true
-        })
+        body: JSON.stringify({ email, password, email_confirm: true })
     });
     if (!res.ok) {
         throw new Error(`建立失敗 ${email}: ${res.status} ${JSON.stringify(data)}`);
@@ -89,10 +193,8 @@ async function updatePassword(userId, password) {
 
 async function upsertAccount(email, password) {
     const existing = await findUserByEmail(email);
-    if (existing && existing.id) {
-        if (!OVERWRITE_EXISTING) {
-            return 'skipped';
-        }
+    if (existing?.id) {
+        if (!OVERWRITE_EXISTING) return 'skipped';
         await updatePassword(existing.id, password);
         return 'updated';
     }
@@ -104,52 +206,92 @@ function validateServiceKey() {
     const k = SERVICE_KEY;
     if (k.startsWith('sb_publishable_') || k.includes('anon')) {
         console.error(
-            '\n錯誤：你用的是 publishable／anon 金鑰，無法呼叫 Admin API。\n' +
-                '請到 Supabase → Settings → API → 複製「service_role」（secret），\n' +
-                '設定：export SUPABASE_SERVICE_ROLE_KEY="eyJ..." 或 sb_secret_...\n' +
-                '切勿把 service_role 放進遊戲或 commit 到 Git。\n'
+            '\n錯誤：請使用 Supabase service_role（secret），不可用 publishable／anon。\n'
         );
         process.exit(1);
     }
 }
 
 async function main() {
+    const args = parseArgs(process.argv);
     if (!BASE || !SERVICE_KEY) {
         console.error('請設定 SUPABASE_URL 與 SUPABASE_SERVICE_ROLE_KEY');
         process.exit(1);
     }
     validateServiceKey();
 
-    const emails = studentEmails();
+    if (!fs.existsSync(args.whitelistCsv)) {
+        console.error('找不到名冊 CSV：', args.whitelistCsv);
+        console.error('請複製 student_whitelist_rows.csv 到 tools/ 或用 --whitelist-csv 指定路徑');
+        process.exit(1);
+    }
+
+    const whitelist = readWhitelistCsv(args.whitelistCsv);
+    let passwordMap = new Map();
+    if (args.students) {
+        if (!args.passwordsCsv || !fs.existsSync(args.passwordsCsv)) {
+            console.error(
+                '學生批次建立需要 --passwords-csv（欄位：email,password）。\n' +
+                    '可從校方 Excel「第2欄密碼」匯出，或執行：\n' +
+                    '  python3 tools/generate_student_whitelist_sql.py --passwords-out passwords.csv "STD AC.xlsx"\n' +
+                    '若不要批次建立：學生首次用 s########@ + 生日登入時，遊戲會自動 signUp（見 tools/AUTH.md）。'
+            );
+            process.exit(1);
+        }
+        passwordMap = readPasswordsCsv(args.passwordsCsv);
+    }
+
+    const jobs = [];
+    for (const row of whitelist) {
+        const kind = accountKind(row.email, row.isAdmin);
+        if (!shouldProvision(row, kind, args)) continue;
+
+        let password = '';
+        if (kind === 'admin') password = ADMIN_PASSWORD;
+        else if (kind === 'legacy_nwcs') password = LEGACY_PASSWORD;
+        else if (kind === 'student') {
+            password = passwordMap.get(row.email) || '';
+            if (!password) {
+                jobs.push({ email: row.email, kind, skip: 'no_password_in_csv' });
+                continue;
+            }
+        } else continue;
+
+        jobs.push({ email: row.email, kind, password });
+    }
+
+    console.log('名冊：', args.whitelistCsv);
+    console.log(
+        '模式：',
+        OVERWRITE_EXISTING ? 'upsert（覆蓋既有密碼）' : 'create_only（略過已有帳號）'
+    );
+    console.log('待處理：', jobs.filter(j => !j.skip).length, '略過無密碼學生：', jobs.filter(j => j.skip).length);
+
     let created = 0;
     let updated = 0;
     let skipped = 0;
     let failed = 0;
 
-    console.log(
-        '模式：',
-        OVERWRITE_EXISTING
-            ? 'upsert（會覆蓋既有密碼）'
-            : 'create_only（既有帳號保留原密碼，只建立新帳號）'
-    );
-
-    for (const email of emails) {
-        const pw = email === ADMIN_EMAIL ? ADMIN_PASSWORD : STUDENT_PASSWORD;
+    for (const job of jobs) {
+        if (job.skip) {
+            skipped++;
+            continue;
+        }
         try {
-            const action = await upsertAccount(email, pw);
+            const action = await upsertAccount(job.email, job.password);
             if (action === 'created') created++;
             else if (action === 'updated') updated++;
             else if (action === 'skipped') skipped++;
-            console.log(`[OK] ${email} (${action})`);
+            console.log(`[OK] ${job.email} (${job.kind}, ${action})`);
         } catch (e) {
             failed++;
-            console.error(`[FAIL] ${email}:`, e.message);
+            console.error(`[FAIL] ${job.email}:`, e.message);
         }
         await new Promise(r => setTimeout(r, 120));
     }
 
-    console.log('\n完成：建立', created, '略過（已有帳號）', skipped, '覆蓋更新', updated, '失敗', failed);
-    console.log('請確認已執行 tools/supabase_seed_nwcs_players.sql（名冊）');
+    console.log('\n完成：建立', created, '略過', skipped, '覆蓋', updated, '失敗', failed);
+    console.log('說明：tools/AUTH.md');
 }
 
 main().catch(e => {

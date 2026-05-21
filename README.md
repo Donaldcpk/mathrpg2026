@@ -12,14 +12,17 @@ https://donaldcpk.github.io/mathrpg2026/
 
 | 項目 | 說明 |
 |------|------|
-| 電郵 | `nwcs003@ngwahsec.edu.hk`（或 `s003@…`，系統會自動轉成 `nwcs003@…`） |
-| 密碼 | 出生年月日 8 位，例 `19980101` |
+| 電郵 | `s2013677@ngwahsec.edu.hk`（與校方名冊相同） |
+| 密碼 | 出生年月日 8 位，例 `20100315` |
+| 管理員 | 電郵輸入 `admin`，密碼見校方文件 |
+
+完整說明（生日密碼存在哪、為何以前能登入）：**[tools/AUTH.md](tools/AUTH.md)**
 
 **與 Supabase 無關的常見問題**
 
 - 畫面仍是舊密碼說明 → 瀏覽器快取，請 **Cmd+Shift+R** 強制重新整理。
 - 電郵欄出現 `nwcs211@…` → 瀏覽器「自動填入」記憶，請手動刪除再輸入自己的帳號。
-- 登入失敗但畫面已更新 → Supabase 帳號密碼可能仍是舊密碼，需教師用 `tools/provision_supabase_auth_users.mjs` 以生日重設（需 service_role）。
+- 學生首次登入 → 遊戲會自動用你輸入的生日建立 Auth 帳號（名冊須已有該電郵）。
 
 ## 重新部署 GitHub Pages
 

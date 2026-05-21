@@ -5,8 +5,8 @@
 window.SCHOOL_AUTH = {
     supabaseUrl: 'https://oqsvxizemgyfointylpe.supabase.co',
     supabaseAnonKey: 'sb_publishable_rk_C92nMfpMxwZ0ciWajPw_jUYxWrCw',
-    adminAuthEmail: 'nwcs211@ngwahsec.edu.hk',
-    adminEmails: ['nwcs211@ngwahsec.edu.hk'],
+    adminAuthEmail: 'admin@ngwahsec.edu.hk',
+    adminEmails: ['admin@ngwahsec.edu.hk', 'nwcs211@ngwahsec.edu.hk'],
     studentEmailDomain: 'ngwahsec.edu.hk',
     storagePrefix: 'nwcs_sb_',
     skipGateOnNwjs: true

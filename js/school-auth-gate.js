@@ -14,12 +14,7 @@
     function normalizeEmail(raw) {
         var s = String(raw || '').trim().toLowerCase();
         if (s === 'admin') {
-            return String(CFG.adminAuthEmail || 'nwcs211@ngwahsec.edu.hk').toLowerCase();
-        }
-        // s003@… → nwcs003@…（與 Supabase 名冊 nwcs 格式對齊）
-        var shortS = s.match(/^s(\d{1,3})@ngwahsec\.edu\.hk$/);
-        if (shortS) {
-            return ('nwcs' + shortS[1].padStart(3, '0') + '@ngwahsec.edu.hk').toLowerCase();
+            return String(CFG.adminAuthEmail || 'admin@ngwahsec.edu.hk').toLowerCase();
         }
         return s;
     }
@@ -231,11 +226,11 @@
         gate.innerHTML =
             '<div class="school-login-card">' +
             '<h1 class="school-login-title">TSA Training</h1>' +
-            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（例：<code>nwcs003@ngwahsec.edu.hk</code> 或 <code>s003@ngwahsec.edu.hk</code>，數字為你的座號／學號）。<br>密碼為你的<strong>出生年月日</strong>（8 位數字，例：<code>19980101</code>）。</p>' +
-            '<p class="school-login-hint admin">教師／管理員請使用校方提供的專用帳號與密碼登入。</p>' +
+            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（例：<code>s2013677@ngwahsec.edu.hk</code>，與校方派發相同）。<br>密碼為<strong>出生年月日</strong>共 8 碼，例 <code>20100315</code>。</p>' +
+            '<p class="school-login-hint admin">管理員：電郵欄輸入 <code>admin</code>，使用管理密碼。</p>' +
             '<label class="school-login-label">電郵</label>' +
-            '<input type="email" id="schoolLoginEmail" class="school-login-input" autocomplete="username" placeholder="s1234567@ngwahsec.edu.hk" />' +
-            '<label class="school-login-label">密碼</label>' +
+            '<input type="email" id="schoolLoginEmail" class="school-login-input" autocomplete="username" placeholder="s2013677@ngwahsec.edu.hk" />' +
+            '<label class="school-login-label">密碼（8 碼生日）</label>' +
             '<input type="password" id="schoolLoginPassword" class="school-login-input" autocomplete="current-password" />' +
             '<p id="schoolLoginError" class="school-login-error" style="display:none"></p>' +
             '<button type="button" id="schoolLoginBtn" class="school-login-btn">登入並進入遊戲</button>' +

@@ -9,6 +9,9 @@
 
   python3 tools/generate_student_whitelist_sql.py "/絕對路徑/STD AC.xlsx" > whitelist_inserts.sql
 
+  # 另匯出 Auth 用密碼表（第 2 欄＝出生年月日 8 碼）：
+  python3 tools/generate_student_whitelist_sql.py --passwords-out tools/student_auth_passwords.csv "/絕對路徑/STD AC.xlsx"
+
 產生的 whitelist_inserts.sql 貼到 Supabase SQL Editor 執行。
 請先執行 tools/supabase_student_whitelist_and_rls.sql，若資料庫是舊版再執行
 tools/supabase_patch_earth_ref.sql（新增 earth_ref 欄位與觸發器）。
@@ -81,10 +84,21 @@ def sql_escape(s: str) -> str:
 
 
 def main() -> None:
-    if len(sys.argv) < 2:
+    argv = sys.argv[1:]
+    passwords_out = ""
+    xlsx_path = ""
+    i = 0
+    while i < len(argv):
+        if argv[i] == "--passwords-out" and i + 1 < len(argv):
+            passwords_out = argv[i + 1]
+            i += 2
+        else:
+            xlsx_path = argv[i]
+            i += 1
+    if not xlsx_path:
         print(__doc__, file=sys.stderr)
         sys.exit(1)
-    path = Path(sys.argv[1]).expanduser()
+    path = Path(xlsx_path).expanduser()
     if not path.is_file():
         print("找不到檔案:", path, file=sys.stderr)
         sys.exit(1)
@@ -94,23 +108,35 @@ def main() -> None:
         print("-- 無資料", file=sys.stderr)
         sys.exit(1)
 
+    pwd_lines: list[str] = []
+    if passwords_out:
+        pwd_lines.append("email,password")
+
     print("-- 由 generate_student_whitelist_sql.py 產生；第三欄為地球身分參照 earth_ref")
     print("BEGIN;")
     for r in rows[1:]:
         while len(r) < 3:
             r.append("")
         email = (r[0] or "").strip().lower()
+        password = (r[1] or "").strip()
         earth_ref = (r[2] or "").strip()
         if not email or "@" not in email:
             continue
         if email in ("學生電郵", "email"):
             continue
+        if passwords_out and password:
+            pwd_lines.append(f"{email},{password}")
         print(
             f"INSERT INTO public.student_whitelist (email, earth_ref, is_admin) "
             f"VALUES ('{sql_escape(email)}', '{sql_escape(earth_ref)}', false) "
             f"ON CONFLICT (email) DO UPDATE SET earth_ref = EXCLUDED.earth_ref;"
         )
     print("COMMIT;")
+
+    if passwords_out:
+        out_path = Path(passwords_out)
+        out_path.write_text("\n".join(pwd_lines) + "\n", encoding="utf-8")
+        print(f"-- 已寫入密碼 CSV：{out_path}（{len(pwd_lines) - 1} 筆）", file=sys.stderr)
 
 
 if __name__ == "__main__":

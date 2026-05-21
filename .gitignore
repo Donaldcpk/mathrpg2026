@@ -3,3 +3,7 @@
 # Editor / tool backups（勿上版控）
 *.bak-radar
 js/plugins/*.bak-*
+
+# 學校名冊／密碼表（含個資，僅放本機 tools/）
+tools/student_whitelist_rows.csv
+tools/student_auth_passwords.csv
