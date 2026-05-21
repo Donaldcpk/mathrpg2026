@@ -135,10 +135,33 @@
             return {};
         });
         if (!res.ok) {
-            var msg = data.msg || data.error_description || data.message || '登入失敗';
-            throw new Error(msg);
+            var msg = data.msg || data.error_description || data.message || data.error || '登入失敗';
+            var err = new Error(formatAuthError(msg, res.status));
+            err.status = res.status;
+            err.raw = data;
+            throw err;
         }
         return data;
+    }
+
+    function formatAuthError(msg, status) {
+        var m = String(msg || '').toLowerCase();
+        if (m.indexOf('invalid login') >= 0 || m.indexOf('invalid credential') >= 0) {
+            return (
+                '電郵或密碼不正確。學生請用 8 位出生年月日（例 20100315）；' +
+                '若你曾用其他密碼登入過，請改試該密碼或聯絡老師重設。'
+            );
+        }
+        if (m.indexOf('email not confirmed') >= 0) {
+            return '此電郵尚未完成驗證，請聯絡老師。';
+        }
+        if (m.indexOf('user not found') >= 0) {
+            return '此電郵尚未註冊；若已在名冊內，請確認生日密碼後再試（首次會自動建立帳號）。';
+        }
+        if (status === 400) {
+            return '登入被拒絕（400）：' + (msg || '請檢查電郵與 8 碼生日密碼。');
+        }
+        return String(msg || '登入失敗');
     }
 
     async function signUp(email, password) {
@@ -157,8 +180,8 @@
             return {};
         });
         if (!res.ok) {
-            var msg = data.msg || data.error_description || data.message || '註冊失敗';
-            throw new Error(msg);
+            var msg = data.msg || data.error_description || data.message || data.error || '註冊失敗';
+            throw new Error(formatAuthError(msg, res.status));
         }
         return data;
     }
