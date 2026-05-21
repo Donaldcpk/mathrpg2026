@@ -21,10 +21,8 @@ const effekseerWasmUrl = "js/libs/effekseer.wasm";
 class Main {
     constructor() {
         this.xhrSucceeded = false;
-        this.xhrCompleted = false;
         this.loadCount = 0;
         this.error = null;
-        this._bootFinalized = false;
     }
 
     run() {
@@ -52,23 +50,8 @@ class Main {
 
     testXhr() {
         const xhr = new XMLHttpRequest();
-        // 動態插入時 document.currentScript 常為 null，改以同源 js/main.js 探測 XHR。
-        const probeUrl =
-            (document.currentScript && document.currentScript.src) ||
-            new URL("js/main.js", document.baseURI).href;
-        xhr.open("GET", probeUrl);
-        const done = () => {
-            this.xhrCompleted = true;
-            this.finalizeBoot();
-        };
-        xhr.onload = () => {
-            this.xhrSucceeded = true;
-            done();
-        };
-        xhr.onerror = xhr.onabort = () => {
-            this.xhrSucceeded = false;
-            done();
-        };
+        xhr.open("GET", document.currentScript.src);
+        xhr.onload = () => (this.xhrSucceeded = true);
         xhr.send();
     }
 
@@ -97,37 +80,10 @@ class Main {
         window.addEventListener("error", this.onWindowError.bind(this));
     }
 
-    // main.js 若由登入後才插入，window「load」已觸發過；改為腳本與 XHR 都完成再啟動 Effekseer。
-    finalizeBoot() {
-        if (this._bootFinalized) return;
-        if (!this.xhrCompleted || this.loadCount !== this.numScripts) return;
-
-        if (!this.xhrSucceeded) {
-            this._bootFinalized = true;
-            const message = "Your browser does not allow to read local files.";
-            this.printError("Error", message);
-            return;
-        }
-        if (this.isPathRandomized()) {
-            this._bootFinalized = true;
-            const message = "Please move the Game.app to a different folder.";
-            this.printError("Error", message);
-            return;
-        }
-        if (this.error) {
-            this._bootFinalized = true;
-            this.printError(this.error.name, this.error.message);
-            return;
-        }
-        this._bootFinalized = true;
-        this.initEffekseerRuntime();
-    }
-
     onScriptLoad() {
         if (++this.loadCount === this.numScripts) {
             PluginManager.setup($plugins);
         }
-        this.finalizeBoot();
     }
 
     onScriptError(e) {
@@ -155,7 +111,17 @@ class Main {
     }
 
     onWindowLoad() {
-        this.finalizeBoot();
+        if (!this.xhrSucceeded) {
+            const message = "Your browser does not allow to read local files.";
+            this.printError("Error", message);
+        } else if (this.isPathRandomized()) {
+            const message = "Please move the Game.app to a different folder.";
+            this.printError("Error", message);
+        } else if (this.error) {
+            this.printError(this.error.name, this.error.message);
+        } else {
+            this.initEffekseerRuntime();
+        }
     }
 
     onWindowError(event) {

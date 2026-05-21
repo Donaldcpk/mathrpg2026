@@ -1,1 +1,5 @@
 .DS_Store
+
+# Editor / tool backups（勿上版控）
+*.bak-radar
+js/plugins/*.bak-*

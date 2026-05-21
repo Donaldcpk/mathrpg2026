@@ -1,0 +1,761 @@
+{
+  "timestamp": "2026-05-21T12:25:23.741Z",
+  "kept": 4213,
+  "kept_by_category": {
+    "S1_CH": 955,
+    "S1_EN": 840,
+    "S2_CH": 600,
+    "S2_EN": 598,
+    "S3_CH": 530,
+    "S3_EN": 530,
+    "TSA_ALL": 160
+  },
+  "removed_scrap": 12,
+  "removed_no_image": 2,
+  "removed_no_csv": 63,
+  "removed_no_image_and_csv": 0,
+  "removed_details": [
+    {
+      "categoryKey": "S1_CH",
+      "chapter": "1A01",
+      "qNum": 10,
+      "note": "1A01",
+      "guid": "1A01/JSMATH1A01MCQ10.jpg",
+      "reasons": [
+        "no_image"
+      ]
+    },
+    {
+      "categoryKey": "S1_CH",
+      "chapter": "1A01",
+      "qNum": 80,
+      "note": "1A01",
+      "guid": "1A01/JSMATH1A01MCQ88.jpg",
+      "reasons": [
+        "no_image"
+      ]
+    },
+    {
+      "categoryKey": "S1_CH",
+      "chapter": "1B09",
+      "qNum": 8,
+      "note": "1B09",
+      "guid": "1B09/JSMATH1B09MCQ8.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1A01MCQ10.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1A011MCQ88.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ31.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ32.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ33.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ34.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ35.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ36.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ37.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ38.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ39.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_CH",
+      "note": "題目廢案",
+      "guid": "題目廢案/JSMATH1B10MCQ40.png",
+      "reason": "scrap"
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 41,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng41.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 42,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng42.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 43,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng43.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 44,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng44.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 45,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng45.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 46,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng46.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 47,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng47.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 48,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng48.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 49,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng49.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 50,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng50.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 51,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng51.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 52,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng52.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 53,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng53.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 54,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng54.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 55,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng55.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 56,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng56.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 57,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng57.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 58,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng58.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 59,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng59.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 60,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng60.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 61,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng61.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 62,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng62.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 63,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng63.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 64,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng64.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 65,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng65.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 66,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng66.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 67,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng67.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 68,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng68.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 69,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng69.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 70,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng70.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 71,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng71.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 72,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng72.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 73,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng73.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 74,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng74.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 75,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng75.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 76,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng76.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 77,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng77.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 78,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng78.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 79,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng79.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 80,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng80.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 81,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng81.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 82,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng82.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 83,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng83.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 84,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng84.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 85,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng85.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 86,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng86.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 87,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng87.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 88,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng88.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 89,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng89.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 90,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng90.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 91,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng91.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 92,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng92.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 93,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng93.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 94,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng94.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 95,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng95.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 96,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng96.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 97,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng97.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 98,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng98.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 99,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng99.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S1_EN",
+      "chapter": "1A02",
+      "qNum": 100,
+      "note": "1A02EN",
+      "guid": "1A02EN/JSMATH1A02MCQEng100.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S2_EN",
+      "chapter": "2A02",
+      "qNum": 38,
+      "note": "2A02EN",
+      "guid": "2A02EN/JSMATH2A02MCQEng38.png",
+      "reasons": [
+        "no_csv"
+      ]
+    },
+    {
+      "categoryKey": "S2_EN",
+      "chapter": "2A02",
+      "qNum": 40,
+      "note": "2A02EN",
+      "guid": "2A02EN/JSMATH2A02MCQEng40.png",
+      "reasons": [
+        "no_csv"
+      ]
+    }
+  ],
+  "before": {
+    "S1_CH": 970,
+    "S1_EN": 900,
+    "S2_CH": 600,
+    "S2_EN": 600,
+    "S3_CH": 530,
+    "S3_EN": 530,
+    "TSA_ALL": 160
+  },
+  "after": {
+    "S1_CH": 955,
+    "S1_EN": 840,
+    "S2_CH": 600,
+    "S2_EN": 598,
+    "S3_CH": 530,
+    "S3_EN": 530,
+    "TSA_ALL": 160
+  },
+  "remaining_question_marks_s13": 0,
+  "remaining_question_marks_tsa": 0
+}
