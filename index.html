@@ -14,9 +14,24 @@
         <title>潛行數界傳奇</title>
     </head>
     <body style="background-color: black">
-        <!-- 勿改回只載入 defaults.js，GitHub 會 404。順序：config.js →（本機）defaults.js → gate.js -->
-        <script type="text/javascript" src="js/school-auth-config.js?v=20260523"></script>
-        <script type="text/javascript" src="js/school-auth-config.defaults.js?v=20260523"></script>
-        <script type="text/javascript" src="js/school-auth-gate.js?v=20260523"></script>
+        <!-- config.js 必載入；defaults.js 僅本機 localhost 才載入（避免 GitHub 404 紅字） -->
+        <script type="text/javascript" src="js/school-auth-config.js?v=20260524"></script>
+        <script type="text/javascript">
+        (function () {
+            var h = location.hostname;
+            if (h !== 'localhost' && h !== '127.0.0.1') return;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'js/school-auth-config.defaults.js', false);
+            try {
+                xhr.send();
+                if (xhr.status === 200) {
+                    eval(xhr.responseText);
+                }
+            } catch (e) {
+                /* 本機無 defaults 時略過 */
+            }
+        })();
+        </script>
+        <script type="text/javascript" src="js/school-auth-gate.js?v=20260524"></script>
     </body>
 </html>
