@@ -23,6 +23,10 @@
 
 RPG Maker 重新部署網頁時，請只覆蓋 `data/`、`img/`，**不要覆蓋整個 index.html**。
 
+## main.js 勿還原成預設版
+
+`js/main.js` 已針對「登入後才動態載入」修正 `window.load` 時序；若用 RPG Maker 預設檔覆蓋，GitHub Pages 會**登入成功但永遠卡在 loading**。
+
 ## 重新部署
 
 ```bash
