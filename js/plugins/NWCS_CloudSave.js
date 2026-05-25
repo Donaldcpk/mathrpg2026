@@ -126,18 +126,6 @@
         }
     }
 
-    function withSyncTimeout(promise, ms, label) {
-        return Promise.race([
-            promise,
-            new Promise(resolve => {
-                setTimeout(() => {
-                    console.warn('[NWCS_CloudSave] 逾時略過：', label);
-                    resolve({ action: 'timeout' });
-                }, ms);
-            })
-        ]);
-    }
-
     class NWCS_CloudSaveManager {
         static get lastSyncResult() {
             return this._lastSyncResult || { action: 'none' };
@@ -562,10 +550,10 @@
 
     const _Scene_Boot_start = Scene_Boot.prototype.start;
     Scene_Boot.prototype.start = function () {
-        _Scene_Boot_start.call(this);
-        if (NWCS_CloudSaveManager.isLoggedIn()) {
-            withSyncTimeout(NWCS_CloudSaveManager.runSync(), 12000, 'background').catch(() => {});
-        }
+        const boot = this;
+        NWCS_CloudSaveManager.runSync().finally(() => {
+            _Scene_Boot_start.call(boot);
+        });
     };
 
     const _DataManager_saveGame = DataManager.saveGame;
@@ -586,12 +574,6 @@
     const _Scene_Title_start = Scene_Title.prototype.start;
     Scene_Title.prototype.start = function () {
         _Scene_Title_start.call(this);
-        if (
-            NWCS_CloudSaveManager.isLoggedIn() &&
-            typeof NWCS_CloudSaveManager.scheduleSyncAfterAuth === 'function'
-        ) {
-            NWCS_CloudSaveManager.scheduleSyncAfterAuth();
-        }
         try {
             const msg = localStorage.getItem('nwcs_cloud_sync_msg');
             const level = localStorage.getItem('nwcs_cloud_sync_level') || 'info';

@@ -135,116 +135,10 @@
             return {};
         });
         if (!res.ok) {
-            var msg = data.msg || data.error_description || data.message || data.error || '登入失敗';
-            var err = new Error(formatAuthError(msg, res.status));
-            err.status = res.status;
-            err.raw = data;
-            throw err;
+            var msg = data.msg || data.error_description || data.message || '登入失敗';
+            throw new Error(msg);
         }
         return data;
-    }
-
-    function formatAuthError(msg, status) {
-        var m = String(msg || '').toLowerCase();
-        if (
-            m.indexOf('already') >= 0 ||
-            m.indexOf('registered') >= 0 ||
-            m.indexOf('already been registered') >= 0
-        ) {
-            return (
-                '此電郵在系統中已存在，但密碼不符（故出現 400＋422）。' +
-                '請確認 8 位生日密碼；若曾用舊密碼註冊，請改試舊密碼，或請老師用 provision 重設為生日。'
-            );
-        }
-        if (m.indexOf('未列入授權名冊') >= 0 || m.indexOf('whitelist') >= 0) {
-            return '此電郵不在校方名冊，請確認學號電郵或聯絡老師。';
-        }
-        if (m.indexOf('weak') >= 0 || m.indexOf('compromised') >= 0 || m.indexOf('pwned') >= 0) {
-            return '此密碼被判定過於簡單，請聯絡老師在 Supabase 關閉「外洩密碼檢查」或改用較強密碼。';
-        }
-        if (m.indexOf('invalid login') >= 0 || m.indexOf('invalid credential') >= 0) {
-            return (
-                '電郵或密碼不正確（400）。學生請用 8 位出生年月日；' +
-                '若帳號已存在會無法自動註冊，請改試舊密碼或請老師重設。'
-            );
-        }
-        if (m.indexOf('email not confirmed') >= 0) {
-            return '此電郵尚未完成驗證。請到 Supabase → Auth → Providers → Email 關閉 Confirm email。';
-        }
-        if (status === 422) {
-            return '註冊被拒絕（422）：' + (msg || '常見為帳號已存在或密碼政策。');
-        }
-        if (status === 400) {
-            return '登入被拒絕（400）：' + (msg || '請檢查電郵與 8 碼生日密碼。');
-        }
-        return String(msg || '登入失敗');
-    }
-
-    function validateStudentEmail(email) {
-        if (/^s\d+@ngwahsec\.edu\.hk$/i.test(email)) return true;
-        if (/^nwcs\d+@ngwahsec\.edu\.hk$/i.test(email)) return true;
-        if (/^admin@ngwahsec\.edu\.hk$/i.test(email)) return true;
-        return false;
-    }
-
-    async function isEmailWhitelisted(email) {
-        var base = authBase();
-        var key = anonKey();
-        if (!base || !key) return true;
-        try {
-            var res = await fetch(base + '/rest/v1/rpc/check_student_email_allowed', {
-                method: 'POST',
-                headers: {
-                    apikey: key,
-                    Authorization: 'Bearer ' + key,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ p_email: email })
-            });
-            if (res.status === 404) {
-                console.warn('[school-auth] 請在 Supabase 執行 tools/supabase_check_email_rpc.sql');
-                return true;
-            }
-            if (!res.ok) return true;
-            var data = await res.json();
-            return data === true;
-        } catch (e) {
-            console.warn('[school-auth] whitelist check', e);
-            return true;
-        }
-    }
-
-    async function loginOrRegister(email, password) {
-        try {
-            return await signInWithPassword(email, password);
-        } catch (e1) {
-            var st1 = e1.status || 0;
-            var raw1 = String((e1.raw && (e1.raw.msg || e1.raw.error_description)) || e1.message || '');
-            var low1 = raw1.toLowerCase();
-            var credFail =
-                st1 === 400 ||
-                low1.indexOf('invalid') >= 0 ||
-                low1.indexOf('credential') >= 0;
-            if (!credFail) throw e1;
-
-            try {
-                var up = await signUp(email, password);
-                if (up.session && up.session.access_token) return up.session;
-                if (up.access_token) return up;
-                return await signInWithPassword(email, password);
-            } catch (e2) {
-                var raw2 = String(e2.message || e2 || '');
-                var low2 = raw2.toLowerCase();
-                if (
-                    low2.indexOf('already') >= 0 ||
-                    low2.indexOf('registered') >= 0 ||
-                    (e2.status === 422 && low2.indexOf('user') >= 0)
-                ) {
-                    throw new Error(formatAuthError('User already registered', 422));
-                }
-                throw e2;
-            }
-        }
     }
 
     async function signUp(email, password) {
@@ -263,11 +157,8 @@
             return {};
         });
         if (!res.ok) {
-            var msg = data.msg || data.error_description || data.message || data.error || '註冊失敗';
-            var err = new Error(formatAuthError(msg, res.status));
-            err.status = res.status;
-            err.raw = data;
-            throw err;
+            var msg = data.msg || data.error_description || data.message || '註冊失敗';
+            throw new Error(msg);
         }
         return data;
     }
@@ -348,24 +239,10 @@
         }
     }
 
-    function hideGameLoadingHint() {
-        var el = document.getElementById('schoolGameLoadingHint');
-        if (el && el.parentNode) {
-            el.parentNode.removeChild(el);
-        }
-    }
-
     function loadMainGame() {
         if (window.__nwcsMainLoaded) return;
         window.__nwcsMainLoaded = true;
         showGameLoadingHint();
-        window.addEventListener(
-            'nwcs-game-ready',
-            function () {
-                hideGameLoadingHint();
-            },
-            { once: true }
-        );
         var s = document.createElement('script');
         s.src = 'js/main.js';
         s.defer = true;
@@ -425,25 +302,41 @@
                 showErr(errEl, '請輸入電郵與密碼。');
                 return;
             }
-            if (!/^admin@|admin$/i.test(em.value) && !validateStudentEmail(email)) {
-                showErr(
-                    errEl,
-                    '電郵格式應為 s########@ngwahsec.edu.hk（例 s2013677@ngwahsec.edu.hk）。'
-                );
-                return;
-            }
-            if (password.length < 8) {
-                showErr(errEl, '學生密碼須為 8 位出生年月日（例 20100315）。');
-                return;
-            }
             btn.disabled = true;
             try {
-                var allowed = await isEmailWhitelisted(email);
-                if (!allowed) {
-                    showErr(errEl, '此電郵不在校方名冊，請確認或聯絡老師。');
-                    return;
+                var data;
+                try {
+                    data = await signInWithPassword(email, password);
+                } catch (e1) {
+                    var msg1 = String(e1.message || e1 || '').toLowerCase();
+                    var tryRegister =
+                        msg1.indexOf('invalid') >= 0 ||
+                        msg1.indexOf('credential') >= 0 ||
+                        msg1.indexOf('password') >= 0;
+                    if (!tryRegister) throw e1;
+                    try {
+                        var up = await signUp(email, password);
+                        if (up.session && up.session.access_token) {
+                            data = up.session;
+                        } else if (up.access_token) {
+                            data = up;
+                        } else {
+                            data = await signInWithPassword(email, password);
+                        }
+                    } catch (e2) {
+                        var msg2 = String(e2.message || e2 || '').toLowerCase();
+                        if (msg2.indexOf('already') >= 0 || msg2.indexOf('registered') >= 0) {
+                            throw new Error(
+                                '此電郵已註冊，請確認密碼是否為你的出生年月日（8 位數字，例：19980101）。'
+                            );
+                        }
+                        throw new Error(
+                            '無法建立帳號：' +
+                                (e2.message || e2) +
+                                '。請確認電郵已列入校方名冊。'
+                        );
+                    }
                 }
-                var data = await loginOrRegister(email, password);
                 applySession(data);
                 await fetchSeatCode(data.access_token);
                 try {
@@ -479,8 +372,7 @@
         d.innerHTML =
             '<motion style="max-width:420px;line-height:1.5">'.replace('motion', 'div') +
             '<h2 style="margin-top:0">缺少學校登入設定</h2>' +
-            '<p>請確認已載入 <code>js/school-auth-config.js</code>（含 Supabase 網址與 anon 金鑰）。' +
-            '本機管理員可另編輯 <code>js/school-auth-config.defaults.js</code> 覆寫。</p>' +
+            '<p>請編輯 <code>js/school-auth-config.defaults.js</code>，填入 Supabase 網址與金鑰。</p>' +
             '</div>';
         d.innerHTML = d.innerHTML.replace('<motion', '<div').replace('</motion>', '</div>');
         document.body.appendChild(d);
@@ -506,15 +398,11 @@
             showConfigMissingOverlay();
             return;
         }
-        // GitHub Pages：一律先顯示登入，避免舊 session 直接載入 main 後卡住
-        var isPublicWeb = /github\.io$/i.test(String(location.hostname || ''));
         var allowAuto = false;
-        if (!isPublicWeb) {
-            try {
-                allowAuto = sessionStorage.getItem('school_auth_ok') === '1';
-            } catch (e) {
-                /* ignore */
-            }
+        try {
+            allowAuto = sessionStorage.getItem('school_auth_ok') === '1';
+        } catch (e) {
+            /* ignore */
         }
         var restored = false;
         if (allowAuto) {

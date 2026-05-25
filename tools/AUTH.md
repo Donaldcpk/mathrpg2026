@@ -18,6 +18,36 @@
 
 ## Provision（本機 only）
 
+### 快速：nwcs003–nwcs244 + 管理員（一次完成）
+
+名冊 `tools/student_whitelist_rows.csv` 已含 `nwcs003@`…`nwcs244@` 與 `admin@`（勿 push）。
+
+```bash
+cp tools/.env.supabase.local.example tools/.env.supabase.local
+# 編輯填入 service_role secret、NWCS_LEGACY_PASSWORD、NWCS_ADMIN_PASSWORD
+
+chmod +x tools/setup_nwcs_auth.sh
+./tools/setup_nwcs_auth.sh
+```
+
+或手動：
+
+```bash
+export SUPABASE_URL="https://YOUR_PROJECT.supabase.co"
+export SUPABASE_SERVICE_ROLE_KEY="（secret，勿 commit）"
+export NWCS_LEGACY_PASSWORD="NWcs1965!"
+export NWCS_ADMIN_PASSWORD="（管理密碼）"
+export NWCS_PROVISION_MODE=upsert
+export NWCS_ADMIN_EMAILS="admin@ngwahsec.edu.hk,nwcs211@ngwahsec.edu.hk"
+
+node tools/sync_student_whitelist_from_csv.mjs
+node tools/provision_supabase_auth_users.mjs --include-legacy-nwcs
+```
+
+**Supabase Dashboard 必做：** [Auth → Providers → Email](https://supabase.com/dashboard/project/oqsvxizemgyfointylpe/auth/providers) 關閉 **Confirm email**，否則無法登入。
+
+### 僅管理員
+
 ```bash
 export SUPABASE_URL="https://YOUR_PROJECT.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="（secret，勿 commit）"

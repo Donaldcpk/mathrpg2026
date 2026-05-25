@@ -23,8 +23,6 @@ class Main {
         this.xhrSucceeded = false;
         this.loadCount = 0;
         this.error = null;
-        this._windowLoadHandled = false;
-        this._pageLoadObserved = document.readyState === "complete";
     }
 
     run() {
@@ -32,14 +30,6 @@ class Main {
         this.testXhr();
         this.hookNwjsClose();
         this.loadMainScripts();
-        this._loadWatchdog = setTimeout(() => {
-            if (this.loadCount < this.numScripts) {
-                this.printError(
-                    "載入逾時",
-                    "請按「返回登入畫面」或清除瀏覽器快取後重試（題庫約 2MB，首次較慢）。"
-                );
-            }
-        }, 120000);
     }
 
     showLoadingSpinner() {
@@ -59,15 +49,9 @@ class Main {
     }
 
     testXhr() {
-        const currentScript = document.currentScript;
-        const probeUrl =
-            currentScript && currentScript.src
-                ? currentScript.src
-                : "js/main.js";
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", probeUrl);
+        xhr.open("GET", document.currentScript.src);
         xhr.onload = () => (this.xhrSucceeded = true);
-        xhr.onerror = () => (this.xhrSucceeded = false);
         xhr.send();
     }
 
@@ -92,30 +76,13 @@ class Main {
             document.body.appendChild(script);
         }
         this.numScripts = scriptUrls.length;
-        window.addEventListener("load", () => {
-            this._pageLoadObserved = true;
-            this.onWindowLoad();
-        });
-        if (document.readyState === "complete") {
-            this._pageLoadObserved = true;
-        }
+        window.addEventListener("load", this.onWindowLoad.bind(this));
         window.addEventListener("error", this.onWindowError.bind(this));
     }
 
     onScriptLoad() {
         if (++this.loadCount === this.numScripts) {
-            if (this._loadWatchdog) {
-                clearTimeout(this._loadWatchdog);
-                this._loadWatchdog = null;
-            }
-            try {
-                PluginManager.setup($plugins);
-            } catch (e) {
-                this.printError("Plugin setup failed", String(e && e.message ? e.message : e));
-            }
-            if (this._pageLoadObserved) {
-                this.onWindowLoad();
-            }
+            PluginManager.setup($plugins);
         }
     }
 
@@ -144,13 +111,6 @@ class Main {
     }
 
     onWindowLoad() {
-        if (this._windowLoadHandled) {
-            return;
-        }
-        if (this.loadCount < this.numScripts) {
-            return;
-        }
-        this._windowLoadHandled = true;
         if (!this.xhrSucceeded) {
             const message = "Your browser does not allow to read local files.";
             this.printError("Error", message);
@@ -186,12 +146,7 @@ class Main {
     }
 
     onEffekseerLoad() {
-        if (this._loadWatchdog) {
-            clearTimeout(this._loadWatchdog);
-            this._loadWatchdog = null;
-        }
         this.eraseLoadingSpinner();
-        window.dispatchEvent(new CustomEvent("nwcs-game-ready"));
         SceneManager.run(Scene_Boot);
     }
 
