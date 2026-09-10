@@ -1,6 +1,29 @@
-# 登入 400 + 註冊 422 — 根源說明
+# 登入失敗 — 根源說明
 
-## 你看到的 Console 代表什麼
+## 0. 目前最常見：後端網域已失效（優先檢查）
+
+若畫面紅字為 **「無法連線登入伺服器」**，或 Console 對 `*.supabase.co` 出現 `Failed to fetch`／DNS 錯誤：
+
+```bash
+# 本機或任何電腦執行；若無 A 紀錄／NXDOMAIN，代表專案已刪除或不存在
+dig oqsvxizemgyfointylpe.supabase.co A +short
+```
+
+**含義：** GitHub Pages 網頁仍可開啟，但登入靠的 Supabase 專案連不上。學生端無法自行修好。
+
+**教師必做：**
+
+1. 到 [Supabase Dashboard](https://supabase.com/dashboard) 確認專案是否仍在（若被刪除請新建）
+2. 把新的 Project URL 與 anon／publishable key 寫入 `js/school-auth-config.js`（與 `js/plugins.js` → OmniscientEncyclopedia 的 supabaseUrl／supabaseKey 保持一致）
+3. 執行名冊 SQL、`check_student_email_rpc.sql`，並用 `tools/provision_supabase_auth_users.mjs` 匯入學生（見下方 B）
+4. Auth → Providers → Email：**關閉 Confirm email**
+5. 推送 `main` 觸發 GitHub Pages 部署
+
+> 註：`school-auth-config.defaults.js` 已 gitignore；GitHub Pages **不應**再請求此檔（僅本機 localhost 覆寫）。若 Console 仍見該檔 404，請強制重新整理或確認已部署最新 `index.html`。
+
+---
+
+## 你看到的 Console：400 + 422
 
 ```
 token?grant_type=password  → 400   （登入失敗）
@@ -8,9 +31,9 @@ signup                     → 422   （註冊也失敗）
 （可能重複兩次）
 ```
 
-這**不是**網頁壞掉，而是 **Supabase Auth 的帳號狀態** 與 **遊戲自動「登入失敗就註冊」** 疊加。
+這**不是**網頁壞掉，而是 **Supabase Auth 的帳號狀態** 與 **遊戲自動「登入失敗就註冊」** 疊加（前提是後端網域仍可連線）。
 
-## 根源（三步）
+## 根源（後端可連線時的三步）
 
 ### 1. 帳號早就存在，但密碼不是生日
 
