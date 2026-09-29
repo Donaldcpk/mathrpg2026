@@ -5,8 +5,8 @@
  */
 window.SCHOOL_AUTH = Object.assign(
     {
-        supabaseUrl: 'https://oqsvxizemgyfointylpe.supabase.co',
-        supabaseAnonKey: 'sb_publishable_rk_C92nMfpMxwZ0ciWajPw_jUYxWrCw',
+        supabaseUrl: 'https://bwkqqbuibrhlvvgojcsb.supabase.co',
+        supabaseAnonKey: 'sb_publishable_94en2BDxUrR9Lw-Qm4REkQ_l3NX0ROf',
         adminAuthEmail: 'admin@ngwahsec.edu.hk',
         adminEmails: ['admin@ngwahsec.edu.hk'],
         studentEmailDomain: 'ngwahsec.edu.hk',
