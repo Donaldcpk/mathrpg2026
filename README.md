@@ -41,3 +41,13 @@ npx --yes serve -l 5500
 ```
 
 瀏覽 http://localhost:5500/index.html
+
+地道劇情軟鎖（對話重跑／主角不能動）的資料檢查：
+
+```bash
+python3 tools/test_tunnel_cutscene_softlock.py
+```
+
+## 版本與變更
+
+版本規則：Semantic Versioning。變更紀錄：[CHANGELOG.md](CHANGELOG.md)。
