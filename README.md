@@ -12,8 +12,8 @@ https://donaldcpk.github.io/mathrpg2026/
 
 | 項目 | 說明 |
 |------|------|
-| 電郵 | 校方派發的 `s########@…` |
-| 密碼 | 出生年月日 8 位 |
+| 電郵 | 完整學校電郵，或只輸入 `@` 前部分（例：`s########`、後備帳 `mathai01`） |
+| 密碼 | 出生年月日 8 位（後備帳用校方指定密碼） |
 | 管理員 | 電郵輸入 `admin`，密碼見校方文件（勿寫入 Git） |
 
 完整說明：**[tools/AUTH.md](tools/AUTH.md)** · 隱私與勿 commit 清單：**[tools/PRIVACY.md](tools/PRIVACY.md)**
