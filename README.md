@@ -41,3 +41,19 @@ npx --yes serve -l 5500
 ```
 
 瀏覽 http://localhost:5500/index.html
+
+## 題庫與校園用語（2026-10 上架前）
+
+- 中二 **2A05**（中英各 100 題）暫時整章停用：題圖選項常與官方答案表不符，且多題 A–D 沒有數學正解。出題外掛會自動略過 `C_A~A4` 為 `?` 的題。
+- 已對題圖核對並修正：`2A02 MCQ6` → D（最高次 8）；`2A03 MCQ51` → C（`14(x−2)`）。
+- 中一（S1）維持原答案，不因官方表字母差異而改動。
+- 校園用語：紅線（粗口暗示／人身攻擊）與黃線（糞game、白痴等）已改為較適合課堂的講法。未改 `tools/AUTH.md`。
+- 驗證：
+
+```bash
+python3 tools/verify_school_content_fixes.py
+# 若有官方答案表 xlsx：
+# python3 tools/verify_school_content_fixes.py --xlsx /path/to/Answer-Key-S1-6.xlsx
+```
+
+變更紀錄見 **[CHANGELOG.md](CHANGELOG.md)**。
