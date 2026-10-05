@@ -4,7 +4,7 @@ import os
 
 def extract_common_events():
     source_file = "CommonEvents.json"
-    output_file = "CommonEvents_Script.txt"
+    output_file = "CommonEvents_Script.txt"  # local extract only; do not commit
     
     # 檢查檔案是否存在
     if not os.path.exists(source_file):

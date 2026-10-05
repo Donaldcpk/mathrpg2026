@@ -1,0 +1,666 @@
+[
+ {
+  "level": "紅",
+  "file": "data/CommonEvents.json",
+  "where": "CE7 地道劇情1 #247 悠真",
+  "find": "這什麼糞 Game 啊！！",
+  "replace": "這什麼爛遊戲啊！！",
+  "count": 1
+ },
+ {
+  "level": "紅",
+  "file": "data/Map035.json",
+  "where": "EV002 p2 #20 悠真",
+  "find": "（我X！這難道就是傳說中的彩蛋！）",
+  "replace": "（嘩！這難道就是傳說中的彩蛋！）",
+  "count": 1
+ },
+ {
+  "level": "紅",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #117 莉娜",
+  "find": "合法常數！",
+  "replace": "不變常數！",
+  "count": 1
+ },
+ {
+  "level": "紅",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #73 莉娜",
+  "find": "本小姐的「絕對領",
+  "replace": "本小姐的「完美肌",
+  "count": 1
+ },
+ {
+  "level": "紅",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #74 莉娜",
+  "find": "域」就要崩塌了！",
+  "replace": "膚」就要崩塌了！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Weapons.json",
+  "where": "Weapons#281 name",
+  "find": "我是你爸爸劍",
+  "replace": "管理員測試劍",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE12 王都劇情2 #414 魔瞳機人V4",
+  "find": "給我把他剁成肉醬！我回來要檢查屍體——當然，是",
+  "replace": "給我把他徹底拿下！我回來要驗收成果——當然，是",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE19 王都劇情9 #92 馮",
+  "find": "伊比利今天剛好還沒吃晚餐，我現在就把你剁了",
+  "replace": "伊比利今天剛好還沒吃晚餐，我現在就把你押去",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE19 王都劇情9 #93 馮",
+  "find": "餵豬！",
+  "replace": "洗豬欄！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE18 王都劇情8 #82 馮",
+  "find": "住口！無恥老賊！豈不知王都之人，皆願生啖你",
+  "replace": "住口！無恥老賊！豈不知王都之人，皆恨不得將你",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE18 王都劇情8 #102 迪迪特",
+  "find": "把這群頑固份子碾成肉泥！消滅數學！",
+  "replace": "把這群頑固份子全部擊退！消滅數學！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE2 第一章第一幕 #19 悠真",
+  "find": "信不信我要去Threads上面刷你啊老伯。",
+  "replace": "信不信我寫封投訴信給客服啊老伯。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE2 第一章第一幕 #15 悠真",
+  "find": "用一種看垃圾的眼神看著艾爾文",
+  "replace": "用一種看怪人的眼神看著艾爾文",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE2 第一章第一幕 #93 悠真",
+  "find": "這個垃圾世",
+  "replace": "這個麻煩世",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE2 第一章第一幕 #99 悠真",
+  "find": "閉嘴，帶路。 再囉嗦我就先把你這個 NPC ",
+  "replace": "好啦好啦，帶路。 再囉嗦我就先把你這個 NPC ",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE2 第一章第一幕 #100 悠真",
+  "find": "砍了練等。",
+  "replace": "當新手教學打。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #82 悠真",
+  "find": "而且拜託，大姐，妳實際年齡都快奔三了吧？",
+  "replace": "而且拜託，大姐，我們是來打魔王的吧？",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #84 悠真",
+  "find": "這種年紀還在執著於「美少女」人設。",
+  "replace": "這種時候還在執著於「美少女」人設。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #88 悠真",
+  "find": "妳這已經不是化妝品能救的範圍，是需要去做全身",
+  "replace": "妳這購物清單長到要用試算表管理，",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #89 悠真",
+  "find": "「數值重修」的工程了。",
+  "replace": "根本是一條「無窮數列」了。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #197 黑貓參謀",
+  "find": "近乎病",
+  "replace": "近乎執",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #198 黑貓參謀",
+  "find": "態的強迫症。",
+  "replace": "著的完美主義。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #201 悠真",
+  "find": "強迫症？",
+  "replace": "完美主義？",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #244 米勒",
+  "find": "確實足以引發精神崩潰。",
+  "replace": "確實足以令人抓狂。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #268 莉娜",
+  "find": "原來是個追求完美的變態啊......",
+  "replace": "原來是個追求完美的怪人啊......",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE21 王都劇情11 #168 悠真",
+  "find": "「幾何強迫症」",
+  "replace": "「幾何完美主義」",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE11 王都劇情1 #55 莉娜",
+  "find": "管他順不順利的, 老娘要大買得買！",
+  "replace": "管他順不順利的, 本小姐要大買特買！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE16 王都劇情6 #41 莉娜",
+  "find": "老娘要出去！",
+  "replace": "本小姐要出去！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE16 王都劇情6 #23 莉娜",
+  "find": "不然我把你的豬頭烤來吃！",
+  "replace": "不然我把你的晚餐全部吃光！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE9 森林劇情3 #64 悠真",
+  "find": "那個大叔根本是想害我變回一級小號被怪虐死吧！",
+  "replace": "那個大叔根本是想害我變回一級小號被怪秒殺吧！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE7 地道劇情1 #69 悠真",
+  "find": "聽到了嗎？負重超載哈哈哈",
+  "replace": "聽到了嗎？木板承重不足哈哈哈",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE14 王都劇情4 #107 悠真",
+  "find": "這國王的 AI 智商也太低了吧？！",
+  "replace": "這國王的 AI 也太好騙了吧？！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE14 王都劇情4 #269 悠真",
+  "find": "難怪這國王智商這麼低！",
+  "replace": "難怪這國王這麼好騙！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE12 王都劇情2 #405 魔瞳機人V4",
+  "find": "哼……算你走運，獨眼老鼠。",
+  "replace": "哼……算你走運，小老鼠。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE12 王都劇情2 #537 獨眼機人C3",
+  "find": "判定為**缺陷生物樣本**。",
+  "replace": "判定為**無效數據樣本**。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/CommonEvents.json",
+  "where": "CE12 王都劇情2 #252 凱爾",
+  "find": "老干媽襪旋風爸啦罷巴霸！",
+  "replace": "超級無敵旋風斬斬斬！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV048 劇情水晶2 p1 #157 莉娜",
+  "find": "你居然敢逃跑? 真是廢物",
+  "replace": "你居然敢逃跑? 真是膽小鬼",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV035/EV048 劇情水晶2 #87/#88 莉娜（2處）",
+  "find": "看你對世界一無所知的蠢樣....",
+  "replace": "看你對世界一無所知的樣子....",
+  "count": 2
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV049 p1 #43 皇鴉傭兵2",
+  "find": "你懂個屁。 三天前",
+  "replace": "你懂甚麼。 三天前",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV049 p1 #70 皇鴉傭兵2",
+  "find": "去問問那個賣菜的老太",
+  "replace": "去問問那個賣菜的大",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV049 p1 #71 皇鴉傭兵2",
+  "find": "婆。",
+  "replace": "嬸。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV049 p1 #90 皇鴉傭兵1",
+  "find": "老太婆，跟妳打聽個事。",
+  "replace": "大嬸，跟妳打聽個事。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV049 p1 #112 皇鴉傭兵2",
+  "find": "這老太婆不對勁。",
+  "replace": "這大嬸不對勁。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV049 p1 #249 皇鴉傭兵1",
+  "find": "這些量產型的廢物根",
+  "replace": "這些量產型的破銅爛鐵根",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV049 p1 #354 兩人",
+  "find": "皇鴉斷頭台！！",
+  "replace": "皇鴉雙翼斬！！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map038.json",
+  "where": "EV003/EV004 p1 #1 皇鴉傭兵1（2處）",
+  "find": "聽說這次那老不死的請了那對姐弟來追殺數八星？",
+  "replace": "聽說這次那老頭子請了那對姐弟來追擊數八星？",
+  "count": 2
+ },
+ {
+  "level": "黃",
+  "file": "data/Map062.json",
+  "where": "EV052/EV164 #73/#77 皇鴉傭兵1（2處）",
+  "find": "混帳東西！本大爺的真本領還沒有拿出來呢！",
+  "replace": "可惡的傢伙！本大爺的真本領還沒有拿出來呢！",
+  "count": 2
+ },
+ {
+  "level": "黃",
+  "file": "data/Map062.json",
+  "where": "EV159 數八星 p1 #61",
+  "find": "到底是哪裡來的廢物？",
+  "replace": "到底是哪裡來的小角色？",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map048.json",
+  "where": "EV017 p1 #6 悠真",
+  "find": "真男人誰怕誰！",
+  "replace": "真勇者誰怕誰！",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV041 小女孩 p1 #4",
+  "find": "不像我只會想著在王國的皇宮裡與王子舉行一場",
+  "replace": "不像我只想考進王國的皇家學院，成為一名",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Map001.json",
+  "where": "EV041 小女孩 p1 #5",
+  "find": "盛大的婚禮。",
+  "replace": "偉大的數學家。",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Troops.json",
+  "where": "T500 第100層 p2 #56 塔主",
+  "find": "倘若有人可以攻頂無限之塔，還是一個小屁孩，",
+  "replace": "倘若有人可以攻頂無限之塔，還是一個小毛頭，",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Troops.json",
+  "where": "T500 第100層 p2 #63 塔主",
+  "find": "收聲，向來都無人可以挑戰到100層",
+  "replace": "唔好再講，向來都無人可以挑戰到100層",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Troops.json",
+  "where": "T500 p4 #26 / p5 #20 魔王（2處）",
+  "find": "還是應該叫你無知的豬？🐷",
+  "replace": "還是應該叫你迷途的小羔羊？",
+  "count": 2
+ },
+ {
+  "level": "黃",
+  "file": "data/Troops.json",
+  "where": "T500 p3 #10 魔王",
+  "find": "被你蹂躪得沒一處安寧......",
+  "replace": "被你攪得沒一處安寧......",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Skills.json",
+  "where": "Skills#904 name",
+  "find": "數無要去掃墓",
+  "replace": "數無要去大掃除",
+  "count": 1
+ },
+ {
+  "level": "黃",
+  "file": "data/Skills.json",
+  "where": "Skills#277/285/347 description（3處）",
+  "find": "切割敵喉",
+  "replace": "直取要害",
+  "count": 3
+ },
+ {
+  "level": "黃",
+  "file": "data/Weapons.json",
+  "where": "Weapons#178 皇鴉魔杖 description",
+  "find": "鑲嵌烏鴉羽毛與\\n頭顱",
+  "replace": "鑲嵌烏鴉羽毛與\\n骨飾",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE1 #90",
+  "find": "你吾係以為可以改名掛？",
+  "replace": "你唔係以為可以改名掛？",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE1 #93",
+  "find": "至少唔使比啲",
+  "replace": "至少唔使畀啲",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE3/CE4 #53（2處）",
+  "find": "能把這他逼到這種地步",
+  "replace": "能把他逼到這種地步",
+  "count": 2
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE12 #18",
+  "find": "因為你不謹是",
+  "replace": "因為你不僅是",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE12 #316",
+  "find": "哼, 雕蟲小計",
+  "replace": "哼, 雕蟲小技",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Map062.json",
+  "where": "EV159 #33",
+  "find": "哼, 雕蟲小計",
+  "replace": "哼, 雕蟲小技",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE14 #122/#165（2處）",
+  "find": "迪佛特",
+  "replace": "迪迪特",
+  "count": 2
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE14 #377",
+  "find": "全員由所騎士豬組成",
+  "replace": "全員由騎著戰豬的騎士組成",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE17 #21",
+  "find": "不祥的預惑",
+  "replace": "不祥的預感",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/CommonEvents.json",
+  "where": "CE19 #169",
+  "find": "進入王官",
+  "replace": "進入王宮",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Map035.json",
+  "where": "EV002 p2 #18",
+  "find": "持之以行",
+  "replace": "持之以恆",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Map035.json",
+  "where": "EV002 p2 #21",
+  "find": "負責人、",
+  "replace": "負責任、",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Map001.json",
+  "where": "EV049 #126",
+  "find": "（猛地拔劍出切匕首）",
+  "replace": "（猛地拔出匕首）",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Map002.json",
+  "where": "EV012 p2（2處）",
+  "find": "講笑姐",
+  "replace": "講笑啫",
+  "count": 2
+ },
+ {
+  "level": "錯字",
+  "file": "data/Map098.json",
+  "where": "EV024（9處）",
+  "find": "即然你能來到此處",
+  "replace": "既然你能來到此處",
+  "count": 9
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500 p1 #2",
+  "find": "多堅持的",
+  "replace": "所堅持的",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500 p1 #6",
+  "find": "用黎鍛鍊我",
+  "replace": "用嚟鍛鍊我",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500（2處）",
+  "find": "唔洗再繼續操數",
+  "replace": "唔使再繼續操數",
+  "count": 2
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500（2處）",
+  "find": "你諗多左",
+  "replace": "你諗多咗",
+  "count": 2
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500（2處）",
+  "find": "估吾到",
+  "replace": "估唔到",
+  "count": 2
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500 p2 #35",
+  "find": "101層都位置",
+  "replace": "101層的位置",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500（2處）",
+  "find": "我吾要再繼續操數",
+  "replace": "我唔要再繼續操數",
+  "count": 2
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500 p4 #4",
+  "find": "投吾投靠嘅問題，我要翻香港",
+  "replace": "投唔投靠嘅問題，我要返香港",
+  "count": 1
+ },
+ {
+  "level": "錯字",
+  "file": "data/Troops.json",
+  "where": "T500 p4/p5（2處）",
+  "find": "我們的意願一員",
+  "replace": "我們的一員",
+  "count": 2
+ },
+ {
+  "level": "錯字",
+  "file": "data/Skills.json",
+  "where": "Skills#902 name",
+  "find": "數八星火箭牶",
+  "replace": "數八星火箭拳",
+  "count": 1
+ }
+]
