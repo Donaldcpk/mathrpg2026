@@ -11,7 +11,7 @@ fi
 
 : "${SUPABASE_URL:?請 export SUPABASE_URL 或寫入 tools/.env.supabase.local}"
 : "${SUPABASE_SERVICE_ROLE_KEY:?請 export SUPABASE_SERVICE_ROLE_KEY}"
-: "${NWCS_LEGACY_PASSWORD:?請 export NWCS_LEGACY_PASSWORD（nwcs###@ 密碼，例 NWcs1965!）}"
+: "${NWCS_LEGACY_PASSWORD:?請 export NWCS_LEGACY_PASSWORD（nwcs###@ 密碼，請填本機環境變數，勿寫入 Git）}"
 : "${NWCS_ADMIN_PASSWORD:?請 export NWCS_ADMIN_PASSWORD（admin@ 管理密碼）}"
 
 echo "== 1/2 同步 student_whitelist =="

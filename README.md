@@ -12,8 +12,8 @@ https://donaldcpk.github.io/mathrpg2026/
 
 | 項目 | 說明 |
 |------|------|
-| 電郵 | 校方派發的 `s########@…` |
-| 密碼 | 出生年月日 8 位 |
+| 電郵 | 完整學校電郵，或只輸入 `@` 前部分（例：`s########`、後備帳 `mathai01`） |
+| 密碼 | 出生年月日 8 位（後備帳用校方指定密碼） |
 | 管理員 | 電郵輸入 `admin`，密碼見校方文件（勿寫入 Git） |
 
 完整說明：**[tools/AUTH.md](tools/AUTH.md)** · 隱私與勿 commit 清單：**[tools/PRIVACY.md](tools/PRIVACY.md)**
@@ -47,7 +47,8 @@ npx --yes serve -l 5500
 - 中二 **2A05**（中英各 100 題）暫時整章停用：題圖選項常與官方答案表不符，且多題 A–D 沒有數學正解。出題外掛會自動略過 `C_A~A4` 為 `?` 的題。
 - 已對題圖核對並修正：`2A02 MCQ6` → D（最高次 8）；`2A03 MCQ51` → C（`14(x−2)`）。
 - 中一（S1）維持原答案，不因官方表字母差異而改動。
-- 校園用語：紅線（粗口暗示／人身攻擊）與黃線（糞game、白痴等）已改為較適合課堂的講法。未改 `tools/AUTH.md`。
+- 校園用語：紅線（粗口暗示／人身攻擊）與黃線（糞game、白痴等）已改為較適合課堂的講法。
+- `tools/AUTH.md` 沿用 main（PR #6）的 placeholder，本 PR 不新增密碼。
 - 驗證：
 
 ```bash
@@ -56,4 +57,6 @@ python3 tools/verify_school_content_fixes.py
 # python3 tools/verify_school_content_fixes.py --xlsx /path/to/Answer-Key-S1-6.xlsx
 ```
 
-變更紀錄見 **[CHANGELOG.md](CHANGELOG.md)**。
+## 版本與變更
+
+變更紀錄見 **[CHANGELOG.md](CHANGELOG.md)**（Keep a Changelog + SemVer）。初期尚未標 1.0.0 公開 API。

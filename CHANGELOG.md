@@ -1,8 +1,13 @@
 # Changelog
 
-本專案版本依 [Semantic Versioning](https://semver.org/lang/zh-TW/)；本檔依 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)。
+本專案依 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/) 記錄可見變更，版本號依 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
 ## [Unreleased]
+
+### Security
+
+- 將 `tools/AUTH.md`、`tools/.env.supabase.local.example`、`tools/SUPABASE_AUTH_ROOT_CAUSE.md`、`tools/student_auth_passwords.csv.example` 中看起來像真實密碼的範例改為明確 placeholder（例如 `YOUR_LEGACY_PASSWORD_HERE`、`YYYYMMDD`），避免明文秘密寫入 Git。
+- 同步移除 `tools/setup_nwcs_auth.sh` 錯誤提示中的舊測試密碼字樣。
 
 ### Fixed
 
@@ -19,4 +24,4 @@
 ### Notes
 
 - 官方答案表：Google Sheet `16E2x8Ios7qEwhMm-rgaGOAJyD9u3DuNdTB3XO8vHlKE`。抽查後發現表上字母不一定等於題圖正確選項，故以「題圖有正解才改、否則停用」為準。
-- 未改 `tools/AUTH.md`（密碼文件另案）。未改黑暗隧道 CE7／Map040 軟鎖修復。
+- `tools/AUTH.md` 沿用 main（PR #6）的 placeholder 清理，本 PR 不新增密碼、不重開已停用題包。未改黑暗隧道 CE7／Map040 軟鎖修復。

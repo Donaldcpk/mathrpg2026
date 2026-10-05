@@ -12,7 +12,8 @@
 
 | 類型 | 電郵 | 密碼 |
 |------|------|------|
-| 學生 | `s########@你的學校網域` | 出生年月日 8 碼 |
+| 學生 | `s########@你的學校網域`，或只輸入 `@` 前部分 | 出生年月日 8 碼 |
+| 後備帳 | 畫面可只輸入 `mathai01`（會補上學校網域） | 校方指定（勿寫入 Git） |
 | 管理員 | 校方指定管理員電郵；畫面可輸入 `admin` | 校方指定（環境變數 `NWCS_ADMIN_PASSWORD`） |
 | 舊 nwcs 測試帳（可選） | `nwcs###@…` | 環境變數 `NWCS_LEGACY_PASSWORD` |
 
@@ -35,8 +36,8 @@ chmod +x tools/setup_nwcs_auth.sh
 ```bash
 export SUPABASE_URL="https://YOUR_PROJECT.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="（secret，勿 commit）"
-export NWCS_LEGACY_PASSWORD="NWcs1965!"
-export NWCS_ADMIN_PASSWORD="（管理密碼）"
+export NWCS_LEGACY_PASSWORD="（請填本機環境變數，勿寫入 Git）"
+export NWCS_ADMIN_PASSWORD="（請填本機環境變數，勿寫入 Git）"
 export NWCS_PROVISION_MODE=upsert
 export NWCS_ADMIN_EMAILS="admin@ngwahsec.edu.hk,nwcs211@ngwahsec.edu.hk"
 
@@ -51,7 +52,7 @@ node tools/provision_supabase_auth_users.mjs --include-legacy-nwcs
 ```bash
 export SUPABASE_URL="https://YOUR_PROJECT.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="（secret，勿 commit）"
-export NWCS_ADMIN_PASSWORD="（管理密碼）"
+export NWCS_ADMIN_PASSWORD="（請填本機環境變數，勿寫入 Git）"
 export NWCS_ADMIN_EMAILS="admin@…,teacher@…"   # 逗號分隔，與名冊 is_admin 一致
 
 cp ~/Downloads/student_whitelist_rows.csv tools/   # 勿 push
@@ -63,7 +64,8 @@ node tools/provision_supabase_auth_users.mjs --admins-only
 
 ## 登入畫面
 
-- 學生：學校派發的 `s########@…` + 8 碼生日  
+- 學生：完整學校電郵，或只輸入 `@` 前部分（閘門會補上 `studentEmailDomain`）+ 8 碼生日  
+- 後備帳：只輸入 `mathai01`（唔使電郵；會變成 `mathai01@ngwahsec.edu.hk`）＋指定密碼  
 - 管理員：輸入 `admin` + 管理密碼  
 
 設定檔：`js/school-auth-config.defaults.js`（本機複製自 `.example`，已 gitignore）。
