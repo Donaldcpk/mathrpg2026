@@ -14,7 +14,7 @@ signup                     → 422   （註冊也失敗）
 
 ### 1. 帳號早就存在，但密碼不是生日
 
-- 以前用 `NWcs1965!` 或 provision 建過帳號  
+- 以前用舊版測試密碼（環境變數 `NWCS_LEGACY_PASSWORD`）或 provision 建過帳號  
 - 學生現在用 **8 位生日** 登入 → **400 Invalid login credentials**  
 - Supabase **故意不區分**「無此帳號」與「密碼錯」（安全設計）
 
@@ -37,7 +37,7 @@ signup                     → 422   （註冊也失敗）
 2. **新增執行** `tools/supabase_check_email_rpc.sql`（登入前檢查電郵是否在名冊）  
 3. 確認名冊含 666 個 `s…@`（從 `student_whitelist_rows.csv` 匯入）  
 4. **Authentication → Providers → Email**：關閉 **Confirm email**（否則註冊後無法登入）  
-5. 若生日 8 碼仍 422：考慮關閉 **Leaked password protection**（否則 `20100315` 可能被拒）
+5. 若生日 8 碼仍 422：考慮關閉 **Leaked password protection**（否則 `YYYYMMDD` 這類常見生日格式可能被拒）
 
 ### B. 用生日重設所有 Auth 密碼（關鍵）
 
@@ -47,7 +47,7 @@ export SUPABASE_URL="https://oqsvxizemgyfointylpe.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="（Settings → API → service_role secret）"
 
 # 1) 管理員帳號
-export NWCS_ADMIN_PASSWORD="你的管理密碼"
+export NWCS_ADMIN_PASSWORD="（請填本機環境變數，勿寫入 Git）"
 export NWCS_ADMIN_EMAILS="admin@ngwahsec.edu.hk,nwcs211@ngwahsec.edu.hk"
 node tools/provision_supabase_auth_users.mjs --admins-only
 
@@ -73,7 +73,7 @@ node tools/provision_supabase_auth_users.mjs --students \
 ## 學生端
 
 - 電郵：`s########@ngwahsec.edu.hk`  
-- 密碼：8 位生日，例 `20100315`  
+- 密碼：8 位生日，格式 `YYYYMMDD`  
 - 若仍失敗：老師尚未執行 B 步重設密碼
 
 ## 不建議

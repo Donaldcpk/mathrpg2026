@@ -41,3 +41,7 @@ npx --yes serve -l 5500
 ```
 
 瀏覽 http://localhost:5500/index.html
+
+## 版本與變更
+
+變更紀錄見 **[CHANGELOG.md](CHANGELOG.md)**（Keep a Changelog + SemVer）。初期尚未標 1.0.0 公開 API。

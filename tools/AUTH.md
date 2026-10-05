@@ -36,8 +36,8 @@ chmod +x tools/setup_nwcs_auth.sh
 ```bash
 export SUPABASE_URL="https://YOUR_PROJECT.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="（secret，勿 commit）"
-export NWCS_LEGACY_PASSWORD="NWcs1965!"
-export NWCS_ADMIN_PASSWORD="（管理密碼）"
+export NWCS_LEGACY_PASSWORD="（請填本機環境變數，勿寫入 Git）"
+export NWCS_ADMIN_PASSWORD="（請填本機環境變數，勿寫入 Git）"
 export NWCS_PROVISION_MODE=upsert
 export NWCS_ADMIN_EMAILS="admin@ngwahsec.edu.hk,nwcs211@ngwahsec.edu.hk"
 
@@ -52,7 +52,7 @@ node tools/provision_supabase_auth_users.mjs --include-legacy-nwcs
 ```bash
 export SUPABASE_URL="https://YOUR_PROJECT.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="（secret，勿 commit）"
-export NWCS_ADMIN_PASSWORD="（管理密碼）"
+export NWCS_ADMIN_PASSWORD="（請填本機環境變數，勿寫入 Git）"
 export NWCS_ADMIN_EMAILS="admin@…,teacher@…"   # 逗號分隔，與名冊 is_admin 一致
 
 cp ~/Downloads/student_whitelist_rows.csv tools/   # 勿 push
