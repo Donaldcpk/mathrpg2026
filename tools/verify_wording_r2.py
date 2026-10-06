@@ -203,10 +203,12 @@ def check_auth_untouched() -> list[str]:
 
 
 def check_2a05_still_disabled() -> list[str]:
-    """Guard: this PR must not re-enable 2A05."""
+    """2A05 may be picture-audited; broken items stay C_A=?."""
     qdb = (ROOT / "js/plugins/questionDatabase.js").read_text(encoding="utf-8")
-    if "school-disabled-2A05-unverified" not in qdb:
-        return ["questionDatabase 缺少 2A05 停用標記，請確認未重開 2A05"]
+    if "2A05/JSMATH2A05MCQ1.png" not in qdb:
+        return ["questionDatabase 缺少 2A05 MCQ1"]
+    if '"C_A": "?"' not in qdb:
+        return ["2A05 應仍有停用題（C_A=?）"]
     return []
 
 
@@ -230,7 +232,7 @@ def main() -> int:
         for e in errors:
             print(" -", e)
         return 1
-    print("OK: 紅線已清、黃線／錯字已套、提取稿已刪、暱稱過濾已擴、AUTH／2A05 未動")
+    print("OK: 紅線已清、黃線／錯字已套、提取稿已刪、暱稱過濾已擴、AUTH 未動")
     return 0
 
 
