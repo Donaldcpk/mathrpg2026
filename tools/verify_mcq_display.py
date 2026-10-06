@@ -5,7 +5,7 @@ Checks:
   - Active pools have no bare Q="MCQ" (must use the Traditional Chinese prompt).
   - TSA prompts stay consistent with S1–S3.
   - Sample picture files exist under ASCII prefixes for S1/S2/S3/TSA.
-  - 2A05 remains disabled (C_A~A4 are "?").
+  - 2A05: broken items stay disabled; picture-fixed items may be live A–D (#10).
   - AUTH.md is not part of this change set.
 
 Usage:
@@ -144,6 +144,8 @@ def check_mzquizzer_paths() -> list[str]:
         errors.append("MZQuizzer.js 缺少題圖載入失敗的中文提示")
     if "mzqShouldNarrowQuizMessage" not in text:
         errors.append("MZQuizzer.js 缺少含 MCQ 的縮窄視窗後備判斷")
+    if "mzqComputeQuizPictureLayout" not in text:
+        errors.append("MZQuizzer.js 缺少每題位圖自適應縮放")
     if re.search(r"folderPrefix\s*=\s*'初中題庫/", text):
         errors.append("MZQuizzer.js 仍把舊中文路徑當主路徑")
     return errors

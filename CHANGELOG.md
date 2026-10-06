@@ -10,6 +10,8 @@
 - `tools/answer_key_s1s3_letters.json`：由 xlsx 抽出的 S1–S3 官方字母表（供無 xlsx 時驗證）。
 - `tools/answer_key_picture_decisions.json`：題圖數學裁定（圖優先於表）。
 - `tools/verify_mcq_display.py`：確認活躍題庫沒有裸 `MCQ` 題幹，並抽查 S1／S2／S3／TSA 題圖檔存在。
+- `tools/verify_quiz_picture_scale.py`：用真實 `mzqComputeQuizPictureLayout` 驗證小圖放大、大圖縮小、左上對齊且不超出目標框。
+- MZQuizzer 外掛參數：`quizPictureMaxWidthPercent`（預設 92）、`quizPictureMaxHeightPercent`（預設 48）、`quizPictureTopY`（預設 24），方便老師之後微調。
 
 ### Security
 
@@ -37,6 +39,7 @@
 
 ### Changed
 
+- MZQuizzer 題圖改為**按每題位圖尺寸**自動縮放至合適可讀大小（目標框約畫布 92% 寬 × 48% 高，保持比例）：S1 常見 400–560×180 會放大；S3／TSA 過大圖會縮小以免蓋住選項。**左上對齊**（origin 左上，x=0），頂端約 y=24，外框 `MZQ_picBG` 用同一左上定位與同一縮放框。顯示變更不改 AUTH／答案；2A05 狀態以 main（#10）題圖裁定為準。
 - 題圖資料夾由 `img/pictures/初中題庫/…` 改為 `img/pictures/quiz/S1/CH|EN`、`quiz/S2/…`、`quiz/S3/…`、`quiz/TSA/…`。執行期仍會嘗試舊路徑作為後備。
 - S1／S2／S3 全部 `"Q":"MCQ"` 改為「請看題目圖片，選出正確答案。」（與 TSA 一致）。
 - 中二 **2A05** 中英各重開 52 題、各停用 48 題（題圖有唯一正解才重開）。
@@ -49,3 +52,4 @@
 - `tools/AUTH.md` 沿用 main（PR #6）的 placeholder，本 PR 不新增密碼、不改 AUTH。未改黑暗隧道 CE7／Map040 軟鎖修復。
 - 第二輪只改用詞與錯字，不重寫劇情。
 - 空白 MCQ 修復不改 AUTH；題圖只搬資料夾名稱，檔名與 GUID 不變。2A05 改由題圖裁定後部分重開。
+- iPad 題圖過大／過小：按每題位圖自動縮放，不是全題共用固定倍率。左上對齊（x=0，y≈24）。老師可用外掛參數微調目標框。
