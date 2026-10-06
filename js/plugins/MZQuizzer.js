@@ -1,9 +1,9 @@
 //=============================================================================
-// MZ-Quiz-Engine.js (v1.5.1 題圖 ASCII 路徑、載入失敗提示、全級別提示語)
+// MZ-Quiz-Engine.js (v1.6.0 題圖自動放大置中，iPad 易讀)
 //=============================================================================
 /*:
  * @target MZ
- * @plugindesc [v1.5.1] Quiz Engine（多變／集中；答錯同一題；TSA 鎖題；題圖載入提示）
+ * @plugindesc [v1.6.0] Quiz Engine（多變／集中；答錯同一題；TSA 鎖題；題圖載入提示）
  * @author Starbird (Modified by Senior Programmer)
  * @help MZ-Quiz-Engine.js
  *
@@ -61,6 +61,14 @@
  * @max 4
  * @default 2
  *
+ * @param quizPictureMaxScale
+ * @text 題圖最大放大率（%）
+ * @desc 題圖會自動放大至可用畫面範圍（避開訊息窗／選項窗），但不超過此百分比。100=不放大。
+ * @type number
+ * @min 100
+ * @max 400
+ * @default 250
+ *
  * @param TsaLockVariableId
  * @text TSA 題號鎖定變數 ID
  * @desc Var 990=4（TSA）時：答錯會重複同一題直到答對。0=未鎖定，>0 表示目前題號為 (值-1)。
@@ -114,6 +122,9 @@
  *   img/pictures/quiz/S1/CH|EN/、quiz/S2/...、quiz/S3/...、quiz/TSA/
  * 若新路徑失敗，會再試舊路徑「初中題庫/S1 AI 生成題目/中文題目/」等。
  * 仍失敗時畫面頂端顯示中文錯誤與實際 URL，不會只剩空白外框。
+ *
+ * v1.6.0：題圖載入後自動放大（上限見 quizPictureMaxScale）並水平置中，
+ * 避開底部訊息窗與右下選項窗；MZQ_picBG 底框同步伸縮。
  */
 
 (() => {
@@ -133,6 +144,8 @@
     const missStreakVariableId = Number(parameters.missStreakVariableId || 997);
     const currentQuestionVariableId = Number(parameters.currentQuestionVariableId || 992);
     const varietyModeVariableId = Number(parameters.varietyModeVariableId || 0);
+    let quizPictureMaxScale = Number(parameters.quizPictureMaxScale || 250);
+    if (!(quizPictureMaxScale >= 100)) quizPictureMaxScale = 100;
 
     let _mzqExpireFrame = 0;
     let _mzqPending = null;
@@ -239,10 +252,67 @@
         }
     }
 
-    function mzqWatchQuizPicture(bitmap, logicalPath, remaining, startedAt) {
+    const MZQ_PIC_MARGIN = 12;
+    const MZQ_BG_PAD = 10;
+    const MZQ_CHOICE_RESERVE_W = 150;
+
+    /**
+     * 題圖原本以 100% 貼在 (0,0)，約 600×170 px 喺 1024×768 畫面只佔一角，
+     * iPad 上字體細到睇唔清。此函式在圖載入後計算放大率並置中，
+     * 避開底部訊息窗及右下選項窗；底框 MZQ_picBG 同步伸縮包住題圖。
+     */
+    function mzqLayoutQuizPicture(bitmap, picName, choiceCount) {
+        const bw = bitmap.width;
+        const bh = bitmap.height;
+        if (!bw || !bh) return;
+        const boxW = Graphics.boxWidth || Graphics.width;
+        const boxH = Graphics.boxHeight || Graphics.height;
+        const scene = SceneManager._scene;
+        let msgH = 104;
+        const inBattleScene = typeof Scene_Battle !== 'undefined' && scene instanceof Scene_Battle;
+        // 戰鬥中訊息窗會被縮窄為 quizMessageLineCount 行；地圖上維持 4 行。
+        const msgLines = inBattleScene ? quizMessageLineCount : 4;
+        if (scene && scene.calcWindowHeight) msgH = scene.calcWindowHeight(msgLines, false) + 8;
+        const rows = Math.max(1, Math.min(choiceCount || 4, 8));
+        const choiceH = rows * 44 + 24;
+        const m = MZQ_PIC_MARGIN + MZQ_BG_PAD;
+        const top = m;
+        const availBottom = boxH - msgH - m;
+        const choiceTop = boxH - msgH - choiceH - m;
+        const fullW = boxW - m * 2;
+        const narrowW = boxW - m * 2 - MZQ_CHOICE_RESERVE_W;
+        const maxS = quizPictureMaxScale / 100;
+        // 方案 A：用全寬，但高度不可伸入選項窗；方案 B：讓出右側選項窗位置，可用到訊息窗頂。
+        const sA = Math.min(fullW / bw, (choiceTop - top) / bh);
+        const sB = Math.min(narrowW / bw, (availBottom - top) / bh);
+        const useA = sA >= sB;
+        let s = Math.min(maxS, useA ? sA : sB);
+        if (!(s > 0)) s = 1;
+        const dw = bw * s;
+        const dh = bh * s;
+        const areaW = useA ? fullW : narrowW;
+        const x = Math.round(m + (areaW - dw) / 2);
+        const y = Math.round(top);
+        $gameScreen.showPicture(98, picName, 0, x, y, s * 100, s * 100, 255, 0);
+
+        const bg = ImageManager.loadPicture('MZQ_picBG');
+        const bgW = bg.isReady() && bg.width ? bg.width : 590;
+        const bgH = bg.isReady() && bg.height ? bg.height : 448;
+        const fw = dw + MZQ_BG_PAD * 2;
+        const fh = dh + MZQ_BG_PAD * 2;
+        $gameScreen.showPicture(
+            97, 'MZQ_picBG', 0, x - MZQ_BG_PAD, y - MZQ_BG_PAD,
+            (fw / bgW) * 100, (fh / bgH) * 100, 255, 0
+        );
+    }
+
+    function mzqWatchQuizPicture(bitmap, logicalPath, remaining, startedAt, choiceCount) {
         const tick = () => {
             if (bitmap.isReady() && !bitmap.isError()) {
                 mzqHidePicErrorBanner();
+                if ($gameScreen.picture(98) && $gameScreen.picture(98).name() === logicalPath) {
+                    mzqLayoutQuizPicture(bitmap, logicalPath, choiceCount);
+                }
                 return;
             }
             if (bitmap.isError()) {
@@ -250,8 +320,8 @@
                 if (remaining && remaining.length > 0) {
                     const nextPath = remaining[0];
                     const nextBitmap = ImageManager.loadPicture(nextPath);
-                    $gameScreen.showPicture(98, nextPath, 0, 0, 0, 100, 100, 255, 0);
-                    mzqWatchQuizPicture(nextBitmap, nextPath, remaining.slice(1), Date.now());
+                    $gameScreen.showPicture(98, nextPath, 0, 0, 0, 100, 100, 0, 0);
+                    mzqWatchQuizPicture(nextBitmap, nextPath, remaining.slice(1), Date.now(), choiceCount);
                     return;
                 }
                 const url = bitmap.url || mzqPictureUrl(logicalPath);
@@ -268,10 +338,11 @@
         setTimeout(tick, 0);
     }
 
-    function mzqShowQuizStemPicture(diff, lang, question) {
+    function mzqShowQuizStemPicture(diff, lang, question, choiceCount) {
         mzqHidePicErrorBanner();
         ImageManager.loadPicture('MZQ_picBG');
-        $gameScreen.showPicture(97, 'MZQ_picBG', 0, 0, 0, 100, 100, 255, 0);
+        // 先隱藏（opacity 0），題圖載入後由 mzqLayoutQuizPicture 放大定位再顯示，避免細圖閃現。
+        $gameScreen.showPicture(97, 'MZQ_picBG', 0, 0, 0, 100, 100, 0, 0);
 
         let picName = '';
         if (question.P_I && question.P_I !== 0 && question.P_I !== '0') picName = String(question.P_I);
@@ -286,8 +357,8 @@
         const paths = prefixes.map(prefix => prefix + picName);
         const first = paths[0];
         const bitmap = ImageManager.loadPicture(first);
-        $gameScreen.showPicture(98, first, 0, 0, 0, 100, 100, 255, 0);
-        mzqWatchQuizPicture(bitmap, first, paths.slice(1), Date.now());
+        $gameScreen.showPicture(98, first, 0, 0, 0, 100, 100, 0, 0);
+        mzqWatchQuizPicture(bitmap, first, paths.slice(1), Date.now(), choiceCount);
     }
 
     function mzqPartyHasPenalty() {
@@ -703,7 +774,7 @@
             diff
         };
 
-        mzqShowQuizStemPicture(diff, lang, question);
+        mzqShowQuizStemPicture(diff, lang, question, question.Q_T === 9 ? 2 : question.Q_T || 4);
 
         let qText = question.Q;
         if (question.E === 1) qText = atob(rotHex(qText));
