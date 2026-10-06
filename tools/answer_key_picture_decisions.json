@@ -69,9 +69,9 @@
       "chapter": "1A01",
       "sheet": "A",
       "db": "B",
-      "picture_answer": null,
-      "action": "keep_disabled",
-      "reason": "8400/{5*(6+2)-10}=280 not in 28/32/36/40",
+      "picture_answer": "A",
+      "action": "fix",
+      "reason": "840/{[5*(6+2)]-10}=840/30=28 is A",
       "sheet_vs_pic": false
     },
     {
@@ -81,9 +81,9 @@
       "chapter": "1A01",
       "sheet": "C",
       "db": "A",
-      "picture_answer": "D",
+      "picture_answer": "B",
       "action": "fix",
-      "reason": "43226 not ÷6 (digit-sum 17); A-C true so D is the false statement",
+      "reason": "3456 not divisible by 5; A/C/D true so false statement is B",
       "sheet_vs_pic": true
     },
     {
@@ -273,9 +273,9 @@
       "chapter": "1A01",
       "sheet": "A",
       "db": "B",
-      "picture_answer": null,
-      "action": "keep_disabled",
-      "reason": "LCM(12,18,30)=180 not in 1800/3600/5400/7200",
+      "picture_answer": "A",
+      "action": "fix",
+      "reason": "LCM(12,18,30)=180 is A",
       "sheet_vs_pic": false
     },
     {
@@ -645,9 +645,9 @@
       "chapter": "1A01",
       "sheet": "A",
       "db": "D",
-      "picture_answer": null,
-      "action": "keep_disabled",
-      "reason": "1444+18/3=1450; den 30; 1450/30 not in 5-8",
+      "picture_answer": "A",
+      "action": "fix",
+      "reason": "(144+18/(6-3))/([3*(5+7)]-6)=150/30=5 is A",
       "sheet_vs_pic": false
     },
     {
@@ -1869,9 +1869,9 @@
       "chapter": "2A02",
       "sheet": "B",
       "db": "C",
-      "picture_answer": null,
-      "action": "keep_disabled",
-      "reason": "3y^4*2y^3=6y^7 not in 5y^7/6y^2/6y^8/5y^8",
+      "picture_answer": "B",
+      "action": "fix",
+      "reason": "3y^4*2y^3=6y^7 is B",
       "sheet_vs_pic": false
     },
     {
@@ -2205,10 +2205,10 @@
       "chapter": "2A02",
       "sheet": "B",
       "db": "A",
-      "picture_answer": null,
-      "action": "keep_disabled",
-      "reason": "(2x+5)(3x-1)=6x^2+13x-5; A is 6x^2+3x-5, none match",
-      "sheet_vs_pic": false
+      "picture_answer": "A",
+      "action": "fix",
+      "reason": "(2x+5)(3x-1)=6x^2+13x-5 is A; sheet B",
+      "sheet_vs_pic": true
     },
     {
       "guid": "2A02/JSMATH2A02MCQ57.png",
