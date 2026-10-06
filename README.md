@@ -50,12 +50,14 @@ npx --yes serve -l 5500
 - 校園用語：紅線（粗口暗示／人身攻擊）與黃線（糞game、白痴、廢物、血腥等）已改為較適合課堂的講法（含第二輪 83 筆）。
 - `tools/AUTH.md` 沿用 main（PR #6）的 placeholder，本 PR 不新增密碼、不重開 2A05。
 - 題圖路徑改為純 ASCII：`img/pictures/quiz/S1/CH|EN/`、`quiz/S2/`、`quiz/S3/`、`quiz/TSA/`（避免 iPad Safari 載入含中文／空白的舊路徑失敗）。S1–S3 題幹由字面 `MCQ` 改為「請看題目圖片，選出正確答案。」與 TSA 一致。
+- 題圖大小（iPad）：MZQuizzer 載入後依**該題**位圖寬高自動縮放，填入畫布約 92% 寬 × 48% 高（外掛參數可調），小圖放大、大圖縮小，水平置中並留出底部選項。不是全題共用同一個放大倍率。
 - 驗證：
 
 ```bash
 python3 tools/verify_school_content_fixes.py
 python3 tools/verify_wording_r2.py
 python3 tools/verify_mcq_display.py
+python3 tools/verify_quiz_picture_scale.py
 # 若有官方答案表 xlsx：
 # python3 tools/verify_school_content_fixes.py --xlsx /path/to/Answer-Key-S1-6.xlsx
 ```

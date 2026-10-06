@@ -7,6 +7,8 @@
 ### Added
 
 - `tools/verify_mcq_display.py`：確認活躍題庫沒有裸 `MCQ` 題幹，並抽查 S1／S2／S3／TSA 題圖檔存在。
+- `tools/verify_quiz_picture_scale.py`：用真實 `mzqComputeQuizPictureLayout` 驗證小圖放大、大圖縮小、置中且不超出目標框。
+- MZQuizzer 外掛參數：`quizPictureMaxWidthPercent`（預設 92）、`quizPictureMaxHeightPercent`（預設 48）、`quizPictureTopY`（預設 24），方便老師之後微調。
 
 ### Security
 
@@ -28,6 +30,7 @@
 
 ### Changed
 
+- MZQuizzer 題圖改為**按每題位圖尺寸**自動縮放至合適可讀大小（目標框約畫布 92% 寬 × 48% 高，保持比例）：S1 常見 400–560×180 會放大；S3／TSA 過大圖會縮小以免蓋住選項。水平置中，頂端約 y=24，外框 `MZQ_picBG` 對齊同一框。未重開 2A05、未改 AUTH／答案。
 - 題圖資料夾由 `img/pictures/初中題庫/…` 改為 `img/pictures/quiz/S1/CH|EN`、`quiz/S2/…`、`quiz/S3/…`、`quiz/TSA/…`。執行期仍會嘗試舊路徑作為後備。
 - S1／S2／S3 全部 `"Q":"MCQ"` 改為「請看題目圖片，選出正確答案。」（與 TSA 一致）。2A05 仍停用，未重開。
 - 暫時停用中二 **2A05** 中英各 100 題（`C_A~A4` 設為 `?`，MZQuizzer 會略過）。官方答案表字母與題圖數學常不一致，無法在上架前逐題重畫選項。
@@ -40,3 +43,4 @@
 - `tools/AUTH.md` 沿用 main（PR #6）的 placeholder 清理，本 PR 不新增密碼、不重開已停用題包。未改黑暗隧道 CE7／Map040 軟鎖修復。
 - 第二輪只改用詞與錯字，不重寫劇情。
 - 空白 MCQ 修復不重開 2A05、不改 AUTH；題圖只搬資料夾名稱，檔名與 GUID 不變。
+- iPad 題圖過大／過小：按每題位圖自動縮放，不是全題共用固定倍率。老師可用外掛參數微調目標框。
