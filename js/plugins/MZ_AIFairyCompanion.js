@@ -348,12 +348,16 @@
             if (qData && (qData.P_I || qData.GUID)) {
                 try {
                     let imgPath = qData.P_I || qData.GUID;
-                    // 在 MZQuizzer 中，圖片路徑前綴處理
                     let folderPrefix = "";
-                    let diff = $gameVariables.value(990) || 1;
-                    if (diff === 1) folderPrefix = "S1MCQ/";
-                    else if (diff === 2) folderPrefix = "S2MCQ/";
-                    else if (diff === 3) folderPrefix = "S3MCQ/";
+                    const quizDiff = $gameVariables.value(990) || 1;
+                    const quizLang = $gameVariables.value(989) || 1;
+                    if (typeof window.MZQ_quizPicturePrefix === "function") {
+                        folderPrefix = window.MZQ_quizPicturePrefix(quizDiff, quizLang);
+                    } else if (quizDiff === 4) {
+                        folderPrefix = "quiz/TSA/";
+                    } else if (quizDiff >= 1 && quizDiff <= 3) {
+                        folderPrefix = "quiz/S" + quizDiff + "/" + (quizLang === 2 ? "EN" : "CH") + "/";
+                    }
 
                     let picName = imgPath.replace(/\.(png|jpg|jpeg)$/i, "");
                     let fullPath = `img/pictures/${folderPrefix}${picName}.png`;
