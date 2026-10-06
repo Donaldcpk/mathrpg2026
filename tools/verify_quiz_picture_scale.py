@@ -5,8 +5,8 @@ Expected on-screen layout (1024×768 game canvas, defaults 92% × 48%, topY=24):
   - After ImageManager loads the question PNG, read bitmap.width/height.
   - Scale that one image to fit a target box (~942×369) while keeping aspect ratio.
   - Small stems (e.g. 400×180, 118×133) scale UP; huge stems (e.g. 2277×1063) scale DOWN.
-  - Never overflow the target box; center X; Y stays above the 4-choice window.
-  - MZQ_picBG (pic 97) is fitted to the same destination rectangle as pic 98.
+  - Never overflow the target box; left-align X (origin top-left, x=0); Y stays above the 4-choice window.
+  - MZQ_picBG (pic 97) uses the same top-left position and destination rectangle as pic 98.
 
 Does not re-enable 2A05 and does not touch AUTH / answers.
 
@@ -86,8 +86,8 @@ def check_layouts(rows: list[dict]) -> list[str]:
     max_h = BOX_H * MAX_H_PCT / 100
     by_name = {row["name"]: row for row in rows}
 
-    print("== 預期版面（1024×768，目標框 92%×48%，頂端 y=24）==")
-    print(f"目標框最大 {max_w:.1f}×{max_h:.1f}；水平置中；底部留給訊息／A–D 選項")
+    print("== 預期版面（1024×768，目標框 92%×48%，左上 x=0、頂端 y=24）==")
+    print(f"目標框最大 {max_w:.1f}×{max_h:.1f}；左上對齊；底部留給訊息／A–D 選項")
     print()
     for name, src_w, src_h, direction in CASES:
         row = by_name[name]
@@ -104,9 +104,10 @@ def check_layouts(rows: list[dict]) -> list[str]:
             errors.append(f"{name}: 高 {dest_h} 超出目標框 {max_h}")
         if not nearly(float(row["scaleX"]), float(row["scaleY"])):
             errors.append(f"{name}: scaleX/scaleY 不一致，比例被拉開")
-        expected_x = round((BOX_W - dest_w) / 2)
-        if int(row["x"]) != expected_x:
-            errors.append(f"{name}: 未水平置中 x={row['x']} 預期 {expected_x}")
+        if int(row["x"]) != 0:
+            errors.append(f"{name}: 應左上對齊 x=0，實際 x={row['x']}")
+        if int(row.get("origin", 0)) != 0:
+            errors.append(f"{name}: origin 應為左上 0，實際 {row.get('origin')}")
         if int(row["y"]) != TOP_Y and dest_h + TOP_Y <= BOX_H:
             errors.append(f"{name}: y={row['y']} 應為 {TOP_Y}（選項窗之上）")
         if dest_h + int(row["y"]) > BOX_H + 1:
@@ -147,6 +148,8 @@ def check_plugin_wiring() -> list[str]:
         errors.append("題圖仍以 100% 釘在 (0,0)，未改為自適應縮放")
     if re.search(r"showPicture\(97,\s*'MZQ_picBG',\s*0,\s*0,\s*0,\s*100,\s*100", mzq):
         errors.append("MZQ_picBG 仍以 100% 釘在 (0,0)，未對齊題圖框")
+    if re.search(r"\(canvasW\s*-\s*destW\)\s*/\s*2", mzq):
+        errors.append("題圖仍水平置中，應改為左上對齊 x=0")
     return errors
 
 
@@ -177,7 +180,7 @@ def main() -> int:
         for e in errors:
             print(" -", e)
         return 1
-    print("OK: 每題依位圖自適應縮放；小圖放大、大圖縮小；置中且不遮選項；AUTH／答案未改")
+    print("OK: 每題依位圖自適應縮放；小圖放大、大圖縮小；左上對齊且不遮選項；AUTH／答案未改")
     return 0
 
 

@@ -141,8 +141,9 @@
  *
  * 題圖顯示（iPad／平板可讀）：ImageManager 載入後讀該題 bitmap.width/height，
  * 按比例縮放入目標框（寬 quizPictureMaxWidthPercent％、高 quizPictureMaxHeightPercent％）。
- * 小圖放大、已偏大的圖縮小，絕不超出框。水平置中，頂端 y=quizPictureTopY，
- * 留出底部訊息／四選項窗。外框 MZQ_picBG（pic 97）對齊同一目標框。
+ * 小圖放大、已偏大的圖縮小，絕不超出框。左上對齊（origin 左上，x=0），
+ * 頂端 y=quizPictureTopY，留出底部訊息／四選項窗。
+ * 外框 MZQ_picBG（pic 97）用同一左上定位與同一縮放框。
  */
 
 (() => {
@@ -310,7 +311,7 @@
         if (y + destH > canvasH) y = Math.max(0, Math.round(canvasH - destH));
         return {
             origin: 0,
-            x: Math.round((canvasW - destW) / 2),
+            x: 0,
             y: y,
             scaleX: scalePct,
             scaleY: scalePct,
