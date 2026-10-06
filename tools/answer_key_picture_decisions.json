@@ -6579,9 +6579,9 @@
       "chapter": "2A02",
       "sheet": "C",
       "db": "B",
-      "picture_answer": null,
-      "action": "keep_disabled",
-      "reason": "C is y/x^{-2}=yx^2, a polynomial; A,B,D also polynomials; no non-polynomial option",
+      "picture_answer": "C",
+      "action": "fix",
+      "reason": "y/(x-2) is not a polynomial; unique C",
       "sheet_vs_pic": false
     },
     {
