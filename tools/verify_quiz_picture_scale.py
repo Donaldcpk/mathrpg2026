@@ -8,7 +8,7 @@ Expected on-screen layout (1024×768 game canvas, defaults 92% × 48%, topY=24):
   - Never overflow the target box; left-align X (origin top-left, x=0); Y stays above the 4-choice window.
   - MZQ_picBG (pic 97) uses the same top-left position and destination rectangle as pic 98.
 
-Does not re-enable 2A05 and does not touch AUTH / answers.
+Does not change AUTH / answers / 2A05 beyond what main (#10) already applied.
 
 Usage:
   python3 tools/verify_quiz_picture_scale.py
