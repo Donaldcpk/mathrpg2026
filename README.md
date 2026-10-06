@@ -44,20 +44,22 @@ npx --yes serve -l 5500
 
 ## 題庫與校園用語（2026-10 上架前）
 
-- 中二 **2A05**（中英各 100 題）暫時整章停用：題圖選項常與官方答案表不符，且多題 A–D 沒有數學正解。出題外掛會自動略過 `C_A~A4` 為 `?` 的題。
-- 已對題圖核對並修正：`2A02 MCQ6` → D（最高次 8）；`2A03 MCQ51` → C（`14(x−2)`）。
-- 中一（S1）維持原答案，不因官方表字母差異而改動。
+- 官方答案表（Google Sheet / `Answer-Key-S1-6.xlsx`）的 A–D **不能當唯一真相**：多章字母與題圖數學不一致。對齊規則是「先對表、再開題圖、以題圖數學為準」。
+- 中二 **2A05** 中英各重開 52 題、各停用 48 題：題圖有唯一 A–D 正解才寫 `C_A`；四選皆錯則 `?`（出題外掛會略過）。
+- 已對題圖核對：`2A05 MCQ1` → A（`(1,5)`，表標 B）；`2A02 MCQ6` → D（最高次 8）；`2A03 MCQ51` → C（`14(x−2)`）。`2A05 MCQ2/3/21/51` 與 `Eng11` 四選無正解，維持停用。停用清單見 `tools/answer_key_still_disabled.md`。
+- 對齊驗證現況：matched **3585**／fixed **219**／still-disabled **219**／sheet-vs-pic **240**／keep_db **143**／活題 leftover **0**（581 則題圖裁定）。
 - 校園用語：紅線（粗口暗示／人身攻擊）與黃線（糞game、白痴、廢物、血腥等）已改為較適合課堂的講法（含第二輪 83 筆）。
-- `tools/AUTH.md` 沿用 main（PR #6）的 placeholder，本 PR 不新增密碼、不重開 2A05。
-- 題圖路徑改為純 ASCII：`img/pictures/quiz/S1/CH|EN/`、`quiz/S2/`、`quiz/S3/`、`quiz/TSA/`（避免 iPad Safari 載入含中文／空白的舊路徑失敗）。S1–S3 題幹由字面 `MCQ` 改為「請看題目圖片，選出正確答案。」與 TSA 一致。
+- `tools/AUTH.md` 沿用 main（PR #6）的 placeholder，本 PR 不改 AUTH、不改出題路徑程式。
+- 題圖路徑：`img/pictures/quiz/S1/CH|EN/`、`quiz/S2/`、`quiz/S3/`、`quiz/TSA/`。
 - 驗證：
 
 ```bash
 python3 tools/verify_school_content_fixes.py
 python3 tools/verify_wording_r2.py
 python3 tools/verify_mcq_display.py
-# 若有官方答案表 xlsx：
-# python3 tools/verify_school_content_fixes.py --xlsx /path/to/Answer-Key-S1-6.xlsx
+python3 tools/verify_answer_key_alignment.py
+# 若有官方答案表 xlsx（會重算 letters JSON）：
+# python3 tools/verify_answer_key_alignment.py --xlsx /path/to/Answer-Key-S1-6.xlsx
 ```
 
 ## 版本與變更

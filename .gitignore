@@ -14,3 +14,4 @@ tools/student_auth_passwords.csv
 js/school-auth-config.defaults.js
 tools/supabase_seed_nwcs_players.sql
 tools/.env.supabase.local
+__pycache__/

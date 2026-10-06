@@ -150,14 +150,16 @@ def check_mzquizzer_paths() -> list[str]:
 
 
 def check_2a05_still_disabled(db: dict) -> list[str]:
+    """Broken 2A05 stay disabled; picture-fixed items may be live A–D."""
     errors = []
     for cat, note in (("S2_CH", "2A05"), ("S2_EN", "2A05EN")):
         qs = [q for q in db.get(cat, []) if q.get("Note") == note]
         if len(qs) != 100:
             errors.append(f"{cat} {note}: 預期 100 題，實際 {len(qs)}")
         live = [q for q in qs if not is_disabled(q)]
-        if live:
-            errors.append(f"{cat} {note}: 不應重開，仍有 {len(live)} 題未停用")
+        bad = [q for q in live if str(q.get("C_A") or "") not in "ABCD"]
+        if bad:
+            errors.append(f"{cat} {note}: 已重開但 C_A 非法 {len(bad)} 題")
     return errors
 
 
@@ -203,7 +205,7 @@ def main() -> int:
         for e in errors:
             print(" -", e)
         return 1
-    print("OK: 全級別已無裸 MCQ、樣本題圖存在、2A05 仍停用、AUTH 未改")
+    print("OK: 全級別已無裸 MCQ、樣本題圖存在、2A05 答案合法、AUTH 未改")
     return 0
 
 
