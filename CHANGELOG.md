@@ -6,6 +6,9 @@
 
 ### Added
 
+- `tools/verify_answer_key_alignment.py`：對齊官方 Answer Key S1–S3 與題庫，並回報 matched／fixed／still-disabled／sheet-vs-pic conflicts。
+- `tools/answer_key_s1s3_letters.json`：由 xlsx 抽出的 S1–S3 官方字母表（供無 xlsx 時驗證）。
+- `tools/answer_key_picture_decisions.json`：題圖數學裁定（圖優先於表）。
 - `tools/verify_mcq_display.py`：確認活躍題庫沒有裸 `MCQ` 題幹，並抽查 S1／S2／S3／TSA 題圖檔存在。
 
 ### Security
@@ -16,6 +19,7 @@
 ### Fixed
 
 - 全級別（S1／S2／S3／TSA）戰鬥題圖在 iPad Safari 常只見空白外框：題幹字面 `MCQ` 不會觸發縮窄訊息窗，且 `初中題庫/S1 AI 生成題目/中文題目/` 等含中文與空白的路徑載入失敗。現改提示語、ASCII 資料夾，並在載入失敗時顯示中文路徑錯誤。
+- 中二 `2A05 MCQ1`：題圖正解 A `(1,5)`，不再跟官方表 B，已重開。
 - 中二 `2A02 MCQ6`：最高次為 D（8 次），不再標 B。
 - 中二 `2A03 MCQ51`：正解改為 C `14(x−2)`，不再標 A `7(x−4)`。
 - 王都／地牢紅線對話改為校園用語（CE12、CE14、CE18、Map094 死亡之球／劍）。
@@ -29,14 +33,14 @@
 ### Changed
 
 - 題圖資料夾由 `img/pictures/初中題庫/…` 改為 `img/pictures/quiz/S1/CH|EN`、`quiz/S2/…`、`quiz/S3/…`、`quiz/TSA/…`。執行期仍會嘗試舊路徑作為後備。
-- S1／S2／S3 全部 `"Q":"MCQ"` 改為「請看題目圖片，選出正確答案。」（與 TSA 一致）。2A05 仍停用，未重開。
-- 暫時停用中二 **2A05** 中英各 100 題（`C_A~A4` 設為 `?`，MZQuizzer 會略過）。官方答案表字母與題圖數學常不一致，無法在上架前逐題重畫選項。
-- 中一 S1 答案維持審計時的狀態，不跟官方表盲目覆寫。
+- S1／S2／S3 全部 `"Q":"MCQ"` 改為「請看題目圖片，選出正確答案。」（與 TSA 一致）。
+- 中二 **2A05** 改為「題圖有正解才重開、否則維持 `?`」，不再整章停用。
+- 官方答案表字母與題圖衝突時以題圖數學為準，不盲覆寫。
 - 排行榜暱稱過濾：新增粵語／國語／英語詞（仆街、撚、柒、他媽、傻逼、fuk 等），並做空白／符號正規化；白名單保留 Dick／Dickson。
 
 ### Notes
 
-- 官方答案表：Google Sheet `16E2x8Ios7qEwhMm-rgaGOAJyD9u3DuNdTB3XO8vHlKE`。抽查後發現表上字母不一定等於題圖正確選項，故以「題圖有正解才改、否則停用」為準。
-- `tools/AUTH.md` 沿用 main（PR #6）的 placeholder 清理，本 PR 不新增密碼、不重開已停用題包。未改黑暗隧道 CE7／Map040 軟鎖修復。
+- 官方答案表：Google Sheet `16E2x8Ios7qEwhMm-rgaGOAJyD9u3DuNdTB3XO8vHlKE`。表對庫的字母核對**有效**（欄位可對到 S1_CH/EN…），但表本身不可靠；以題圖數學為準。
+- `tools/AUTH.md` 沿用 main（PR #6）的 placeholder，本 PR 不新增密碼、不改 AUTH。未改黑暗隧道 CE7／Map040 軟鎖修復。
 - 第二輪只改用詞與錯字，不重寫劇情。
-- 空白 MCQ 修復不重開 2A05、不改 AUTH；題圖只搬資料夾名稱，檔名與 GUID 不變。
+- 空白 MCQ 修復不改 AUTH；題圖只搬資料夾名稱，檔名與 GUID 不變。2A05 改由題圖裁定後部分重開。

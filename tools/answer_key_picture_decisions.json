@@ -1,0 +1,102 @@
+{
+  "generated": "2026-10-06",
+  "policy": "Picture math wins over official sheet letters. Do not guess. If none of A–D is correct, keep C_A='?'.",
+  "decisions": [
+    {
+      "guid": "2A05/JSMATH2A05MCQ1.png",
+      "qn": 1,
+      "pool": "S2_CH",
+      "chapter": "2A05",
+      "sheet": "B",
+      "db": "?",
+      "picture_answer": "A",
+      "action": "fix",
+      "reason": "2x+y=7, x-3y=-14 → (1,5) is A; sheet B (2,3) fails x-3y=-14",
+      "sheet_vs_pic": true
+    },
+    {
+      "guid": "2A05/JSMATH2A05MCQ2.png",
+      "qn": 2,
+      "pool": "S2_CH",
+      "chapter": "2A05",
+      "sheet": "A",
+      "db": "?",
+      "picture_answer": null,
+      "action": "keep_disabled",
+      "reason": "4x-5y=17 and 3x+2y=4 → x=54/23; all four options satisfy only the first equation",
+      "sheet_vs_pic": false
+    },
+    {
+      "guid": "2A05/JSMATH2A05MCQ3.png",
+      "qn": 3,
+      "pool": "S2_CH",
+      "chapter": "2A05",
+      "sheet": "A",
+      "db": "?",
+      "picture_answer": null,
+      "action": "keep_disabled",
+      "reason": "y=4-3x into 2x+5y=18 → x=2/13; none of A–D",
+      "sheet_vs_pic": false
+    },
+    {
+      "guid": "2A05/JSMATH2A05MCQ21.png",
+      "qn": 21,
+      "pool": "S2_CH",
+      "chapter": "2A05",
+      "sheet": "C",
+      "db": "?",
+      "picture_answer": null,
+      "action": "keep_disabled",
+      "reason": "5a+3o=45, 7a+2o=49 → 3a+4o=41; options are 33/36/39/42",
+      "sheet_vs_pic": false
+    },
+    {
+      "guid": "2A05/JSMATH2A05MCQ51.png",
+      "qn": 51,
+      "pool": "S2_CH",
+      "chapter": "2A05",
+      "sheet": "C",
+      "db": "?",
+      "picture_answer": null,
+      "action": "keep_disabled",
+      "reason": "x/4+y/3=2, x/2-y/6=1 → (3.2, 3.6); all options have y=3",
+      "sheet_vs_pic": false
+    },
+    {
+      "guid": "2A05EN/JSMATH2A05MCQEng11.png",
+      "qn": 11,
+      "pool": "S2_EN",
+      "chapter": "2A05",
+      "sheet": "A",
+      "db": "?",
+      "picture_answer": null,
+      "action": "keep_disabled",
+      "reason": "2.5m+1.5n=20, 0.5m-n=1 → m=86/13; all four options satisfy only the second equation",
+      "sheet_vs_pic": false
+    },
+    {
+      "guid": "2A02/JSMATH2A02MCQ6.png",
+      "qn": 6,
+      "pool": "S2_CH",
+      "chapter": "2A02",
+      "sheet": "B",
+      "db": "D",
+      "picture_answer": "D",
+      "action": "keep_db",
+      "reason": "deg(x^3 y^5)=8 is D; A=5, B=6, C=6; sheet B is wrong",
+      "sheet_vs_pic": true
+    },
+    {
+      "guid": "2A03/JSMATH2A03MCQ51.png",
+      "qn": 51,
+      "pool": "S2_CH",
+      "chapter": "2A03",
+      "sheet": "A",
+      "db": "C",
+      "picture_answer": "C",
+      "action": "keep_db",
+      "reason": "14x-28=14(x-2) is C; sheet A 7(x-4) is 7x-28",
+      "sheet_vs_pic": true
+    }
+  ]
+}

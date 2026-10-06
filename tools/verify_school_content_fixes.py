@@ -23,8 +23,8 @@ SAMPLE_CHECKS = [
     {
         "id": "2A05 MCQ1",
         "guid": "2A05/JSMATH2A05MCQ1.png",
-        "expect": "disabled",
-        "why": "題圖正解為 A(1,5)，官方/舊庫標 B(2,3)；全章暫停用",
+        "expect": "A",
+        "why": "題圖正解為 A(1,5)，官方表標 B(2,3)；已重開",
     },
     {
         "id": "2A05 MCQ2",
@@ -155,14 +155,16 @@ def check_samples(db: dict) -> list[str]:
 
 
 def check_chapter_disabled(db: dict) -> list[str]:
+    """2A05 may be partially re-enabled after picture audit; broken items stay ?."""
     errors = []
     for cat, notes in (("S2_CH", "2A05"), ("S2_EN", "2A05EN")):
         qs = [q for q in db[cat] if q.get("Note") == notes]
         if len(qs) != 100:
             errors.append(f"{cat} {notes} 預期 100 題，實際 {len(qs)}")
         live = [q for q in qs if not is_disabled(q)]
-        if live:
-            errors.append(f"{cat} {notes} 仍有 {len(live)} 題未停用")
+        bad_live = [q for q in live if str(q.get("C_A") or "") not in "ABCD"]
+        if bad_live:
+            errors.append(f"{cat} {notes} 有 {len(bad_live)} 題已啟用但 C_A 不是 A–D")
     s1_live_2a05 = [
         q
         for q in db.get("S1_CH", []) + db.get("S1_EN", [])
@@ -232,8 +234,8 @@ def optional_xlsx_note(xlsx: Path | None) -> str:
     q1 = str(ws.cell(2, 18).value or "").strip().upper()
     q6_2a02 = str(ws.cell(7, 6).value or "").strip().upper()
     return (
-        f"官方表 2A05 Q1 中文={q1}（題圖數學為 A，故不跟表）；"
-        f" 2A02 Q6 中文={q6_2a02}（題圖數學為 D，故不跟表）"
+        f"官方表 2A05 Q1 中文={q1}（題圖數學為 A，已重開為 A）；"
+        f" 2A02 Q6 中文={q6_2a02}（題圖數學為 D，維持 D）"
     )
 
 
@@ -265,7 +267,7 @@ def main() -> int:
         for e in errors:
             print(" -", e)
         return 1
-    print("OK: 樣本、2A05 停用、S1 未停用、紅黃線（含 r2）、AUTH 均通過")
+    print("OK: 樣本、2A05 題圖裁定、S1 未整章停用、紅黃線（含 r2）、AUTH 均通過")
     return 0
 
 
