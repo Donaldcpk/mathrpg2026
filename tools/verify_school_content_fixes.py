@@ -176,11 +176,16 @@ def check_chapter_disabled(db: dict) -> list[str]:
 
 
 def check_s1_not_question_marked(db: dict) -> list[str]:
+    """S1 may disable items whose A–D contain no picture-true option."""
     errors = []
     for cat in ("S1_CH", "S1_EN"):
-        bad = [q for q in db[cat] if is_disabled(q) or q.get("C_A") == "?"]
-        if bad:
-            errors.append(f"{cat} 不應被這次修正停用，卻有 {len(bad)} 題 C_A=?")
+        qs = db.get(cat, [])
+        live = [q for q in qs if not is_disabled(q)]
+        bad_live = [q for q in live if str(q.get("C_A") or "") not in "ABCD"]
+        if bad_live:
+            errors.append(f"{cat} 有 {len(bad_live)} 題已啟用但 C_A 不是 A–D")
+        if len(qs) < 100:
+            errors.append(f"{cat} 題數異常：{len(qs)}")
     return errors
 
 
