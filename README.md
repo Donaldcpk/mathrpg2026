@@ -42,6 +42,12 @@ npx --yes serve -l 5500
 
 瀏覽 http://localhost:5500/index.html
 
+地道劇情軟鎖（對話重跑／主角不能動）的資料檢查：
+
+```bash
+python3 tools/test_tunnel_cutscene_softlock.py
+```
+
 ## 題庫與校園用語（2026-10 上架前）
 
 - 官方答案表（Google Sheet / `Answer-Key-S1-6.xlsx`）的 A–D **不能當唯一真相**：多章字母與題圖數學不一致。對齊規則是「先對表、再開題圖、以題圖數學為準」。

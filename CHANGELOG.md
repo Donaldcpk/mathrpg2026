@@ -12,6 +12,7 @@
 - `tools/verify_mcq_display.py`：確認活躍題庫沒有裸 `MCQ` 題幹，並抽查 S1／S2／S3／TSA 題圖檔存在。
 - `tools/verify_quiz_picture_scale.py`：用真實 `mzqComputeQuizPictureLayout` 驗證小圖放大、大圖縮小、左上對齊且不超出目標框。
 - MZQuizzer 外掛參數：`quizPictureMaxWidthPercent`（預設 92）、`quizPictureMaxHeightPercent`（預設 48）、`quizPictureTopY`（預設 24），方便老師之後微調。
+- `tools/test_tunnel_cutscene_softlock.py`：檢查黑暗隧道開場劇情不會重跑、主角可恢復移動。
 
 ### Security
 
@@ -20,6 +21,9 @@
 
 ### Fixed
 
+- 黑暗隧道（Map040／共用事件「地道劇情1」）對話結束後不再重跑，主角可恢復移動。CE7 將開關 132 設為 OFF（RMMZ：`121` 的 0=ON、1=OFF）；EV40 不再重開 132，改以自我開關 A 防止重入。
+- 地道殭屍在開關 134 開啟前改為隱形、可穿越、不追逐；被抓住改傳回地道入口，不再瞬間 Game Over。
+- 米勒逃跑的移動改為可略過並開啟穿透，避免卡在等待。
 - 全級別（S1／S2／S3／TSA）戰鬥題圖在 iPad Safari 常只見空白外框：題幹字面 `MCQ` 不會觸發縮窄訊息窗，且 `初中題庫/S1 AI 生成題目/中文題目/` 等含中文與空白的路徑載入失敗。現改提示語、ASCII 資料夾，並在載入失敗時顯示中文路徑錯誤。
 - 中二 `2A05 MCQ1`：題圖正解 A `(1,5)`，不再跟官方表 B，已重開。
 - 中二 `2A02 MCQ6`：最高次為 D（8 次），不再標 B。
@@ -49,7 +53,13 @@
 ### Notes
 
 - 官方答案表：Google Sheet `16E2x8Ios7qEwhMm-rgaGOAJyD9u3DuNdTB3XO8vHlKE`。表對庫的字母核對**有效**（欄位可對到 S1_CH/EN…），但表本身不可靠；以題圖數學為準。
-- `tools/AUTH.md` 沿用 main（PR #6）的 placeholder，本 PR 不新增密碼、不改 AUTH。未改黑暗隧道 CE7／Map040 軟鎖修復。
+- `tools/AUTH.md` 沿用 main（PR #6）的 placeholder，本 PR 不新增密碼、不改 AUTH。題庫與用語變更原本未改黑暗隧道；CE7／Map040 軟鎖修復已併入（見上方 Fixed）。
 - 第二輪只改用詞與錯字，不重寫劇情。
 - 空白 MCQ 修復不改 AUTH；題圖只搬資料夾名稱，檔名與 GUID 不變。2A05 改由題圖裁定後部分重開。
 - iPad 題圖過大／過小：按每題位圖自動縮放，不是全題共用固定倍率。左上對齊（x=0，y≈24）。老師可用外掛參數微調目標框。
+
+## [0.1.0] - 2026-10-05
+
+### Added
+
+- TSA Training RPG Maker MZ 網頁版初版（數學村、地道、霧光森林與後續地圖）。
