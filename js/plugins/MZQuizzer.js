@@ -1,9 +1,9 @@
 //=============================================================================
-// MZ-Quiz-Engine.js (v1.5.0 多變／集中出題、答題設定選單、排行榜答對題數聯動)
+// MZ-Quiz-Engine.js (v1.6.0 題圖依每題位圖自適應縮放，方便 iPad 閱讀)
 //=============================================================================
 /*:
  * @target MZ
- * @plugindesc [v1.5.0] Quiz Engine（多變／集中；答錯同一題；TSA 鎖題；逾時算錯）
+ * @plugindesc [v1.6.0] Quiz Engine（多變／集中；答錯同一題；TSA 鎖題；題圖自適應縮放）
  * @author Starbird (Modified by Senior Programmer)
  * @help MZ-Quiz-Engine.js
  *
@@ -61,6 +61,30 @@
  * @max 4
  * @default 2
  *
+ * @param quizPictureMaxWidthPercent
+ * @text 題圖最大寬度（占畫布％）
+ * @desc 每題載入後依位圖寬高縮放，寬度不超過此百分比。小圖放大、大圖縮小。預設 92。
+ * @type number
+ * @min 40
+ * @max 100
+ * @default 92
+ *
+ * @param quizPictureMaxHeightPercent
+ * @text 題圖最大高度（占畫布％）
+ * @desc 高度上限，預留給底部訊息／選項窗。預設 48（約一半畫面以下）。
+ * @type number
+ * @min 20
+ * @max 80
+ * @default 48
+ *
+ * @param quizPictureTopY
+ * @text 題圖頂端 Y
+ * @desc 題圖上緣的畫布座標（原點左上）。預設 24，置於選項窗之上。
+ * @type number
+ * @min 0
+ * @max 400
+ * @default 24
+ *
  * @param TsaLockVariableId
  * @text TSA 題號鎖定變數 ID
  * @desc Var 990=4（TSA）時：答錯會重複同一題直到答對。0=未鎖定，>0 表示目前題號為 (值-1)。
@@ -109,6 +133,17 @@
  *
  * 題庫要求（四選題 Q_T=4）：C_A、A2、A3、A4 須為 A～D 各出現一次之字母，
  * C_A 為正解字母。若皆為「?」占位，出題時會自動略過該題（請補齊題庫）。
+ *
+ * 題圖資料夾（ASCII，避免 iPad Safari 載入中文／空白路徑失敗）：
+ *   img/pictures/quiz/S1/CH|EN/、quiz/S2/...、quiz/S3/...、quiz/TSA/
+ * 若新路徑失敗，會再試舊路徑「初中題庫/S1 AI 生成題目/中文題目/」等。
+ * 仍失敗時畫面頂端顯示中文錯誤與實際 URL，不會只剩空白外框。
+ *
+ * 題圖顯示（iPad／平板可讀）：ImageManager 載入後讀該題 bitmap.width/height，
+ * 按比例縮放入目標框（寬 quizPictureMaxWidthPercent％、高 quizPictureMaxHeightPercent％）。
+ * 小圖放大、已偏大的圖縮小，絕不超出框。左上對齊（origin 左上，x=0），
+ * 頂端 y=quizPictureTopY，留出底部訊息／四選項窗。
+ * 外框 MZQ_picBG（pic 97）用同一左上定位與同一縮放框。
  */
 
 (() => {
@@ -129,12 +164,275 @@
     const currentQuestionVariableId = Number(parameters.currentQuestionVariableId || 992);
     const varietyModeVariableId = Number(parameters.varietyModeVariableId || 0);
 
+    function mzqClampNumber(value, fallback, min, max) {
+        let n = Number(value);
+        if (!isFinite(n)) n = fallback;
+        if (n < min) n = min;
+        if (n > max) n = max;
+        return n;
+    }
+
+    const quizPictureMaxWidthPercent = mzqClampNumber(parameters.quizPictureMaxWidthPercent, 92, 40, 100);
+    const quizPictureMaxHeightPercent = mzqClampNumber(parameters.quizPictureMaxHeightPercent, 48, 20, 80);
+    const quizPictureTopY = mzqClampNumber(parameters.quizPictureTopY, 24, 0, 400);
+
     let _mzqExpireFrame = 0;
     let _mzqPending = null;
     let _mzqCurrentQuestion = null;
     let _mzqAwaitingCorrect = false;
     let _mzqDeferredEnemyTurn = false;
     const _mzqValidIndexCache = Object.create(null);
+    const MZQ_PIC_ERROR_ID = 'mzq-pic-error';
+    const MZQ_QUIZ_PROMPT = '請看題目圖片，選出正確答案。';
+    const MZQ_LEGACY_DIFF_FOLDER = {
+        1: 'S1 AI 生成題目',
+        2: 'S2 AI生成題目',
+        3: 'S3 AI生成題目'
+    };
+
+    function mzqQuizPicturePrefix(diff, lang) {
+        if (diff === 4) return 'quiz/TSA/';
+        const grade = diff === 1 ? 'S1' : diff === 2 ? 'S2' : diff === 3 ? 'S3' : '';
+        if (!grade) return '';
+        const langKey = lang === 2 ? 'EN' : 'CH';
+        return 'quiz/' + grade + '/' + langKey + '/';
+    }
+
+    function mzqLegacyQuizPicturePrefix(diff, lang) {
+        if (diff === 4) return '初中題庫/TSA/';
+        const folderDiff = MZQ_LEGACY_DIFF_FOLDER[diff];
+        if (!folderDiff) return '';
+        const folderLang = lang === 2 ? '英文題目' : '中文題目';
+        return '初中題庫/' + folderDiff + '/' + folderLang + '/';
+    }
+
+    function mzqQuizPictureCandidates(diff, lang) {
+        const seen = Object.create(null);
+        const out = [];
+        [mzqQuizPicturePrefix(diff, lang), mzqLegacyQuizPicturePrefix(diff, lang)].forEach(prefix => {
+            if (prefix && !seen[prefix]) {
+                seen[prefix] = true;
+                out.push(prefix);
+            }
+        });
+        if (out.length === 0) out.push('');
+        return out;
+    }
+
+    window.MZQ_quizPicturePrefix = mzqQuizPicturePrefix;
+    window.MZQ_quizPictureCandidates = mzqQuizPictureCandidates;
+    window.MZQ_quizPictureMaxWidthPercent = quizPictureMaxWidthPercent;
+    window.MZQ_quizPictureMaxHeightPercent = quizPictureMaxHeightPercent;
+    window.MZQ_quizPictureTopY = quizPictureTopY;
+
+    function mzqShouldNarrowQuizMessage(text) {
+        const raw = String(text || '');
+        if (quizPromptSubstring && raw.indexOf(quizPromptSubstring) >= 0) return true;
+        if (raw.indexOf(MZQ_QUIZ_PROMPT) >= 0) return true;
+        const plain = raw.replace(/\\n/g, '\n').replace(/\s+/g, ' ').trim();
+        if (plain === 'MCQ') return true;
+        return /(^|[^A-Za-z0-9])MCQ([^A-Za-z0-9]|$)/.test(plain);
+    }
+
+    function mzqHidePicErrorBanner() {
+        if (typeof document === 'undefined') return;
+        const el = document.getElementById(MZQ_PIC_ERROR_ID);
+        if (el) el.style.display = 'none';
+    }
+
+    function mzqShowPicErrorBanner(message) {
+        console.error('[MZQuizzer]', message);
+        if (typeof document === 'undefined' || !document.body) return;
+        let el = document.getElementById(MZQ_PIC_ERROR_ID);
+        if (!el) {
+            el = document.createElement('div');
+            el.id = MZQ_PIC_ERROR_ID;
+            el.setAttribute('role', 'alert');
+            el.style.cssText = [
+                'position:fixed',
+                'left:12px',
+                'right:12px',
+                'top:12px',
+                'z-index:99999',
+                'background:#8b1e1e',
+                'color:#fff',
+                'padding:10px 14px',
+                'font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif',
+                'border-radius:8px',
+                'box-shadow:0 2px 8px rgba(0,0,0,.35)',
+                'word-break:break-all'
+            ].join(';');
+            document.body.appendChild(el);
+        }
+        el.textContent = message;
+        el.style.display = 'block';
+    }
+
+    function mzqPictureUrl(logicalName) {
+        const encoded = Utils && Utils.encodeURI ? Utils.encodeURI(logicalName) : encodeURI(logicalName);
+        return 'img/pictures/' + encoded + '.png';
+    }
+
+    function mzqDiscardBrokenBitmap(bitmap) {
+        if (!bitmap || !bitmap.url) return;
+        try {
+            if (ImageManager._cache && ImageManager._cache[bitmap.url] === bitmap) {
+                delete ImageManager._cache[bitmap.url];
+            }
+        } catch (ignore) {
+            /* 避免壞圖卡在快取導致下一場報英文 LoadError */
+        }
+    }
+
+    /* MZQ_COMPUTE_QUIZ_PICTURE_LAYOUT_START */
+    function mzqComputeQuizPictureLayout(srcW, srcH, boxW, boxH, maxWPercent, maxHPercent, topY) {
+        const canvasW = Number(boxW) > 0 ? Number(boxW) : 1024;
+        const canvasH = Number(boxH) > 0 ? Number(boxH) : 768;
+        const imgW = Number(srcW) > 0 ? Number(srcW) : 480;
+        const imgH = Number(srcH) > 0 ? Number(srcH) : 180;
+        let pctW = Number(maxWPercent);
+        let pctH = Number(maxHPercent);
+        if (!isFinite(pctW)) pctW = 92;
+        if (!isFinite(pctH)) pctH = 48;
+        if (pctW < 40) pctW = 40;
+        if (pctW > 100) pctW = 100;
+        if (pctH < 20) pctH = 20;
+        if (pctH > 80) pctH = 80;
+        const maxW = canvasW * pctW / 100;
+        const maxH = canvasH * pctH / 100;
+        const scale = Math.min(maxW / imgW, maxH / imgH);
+        const scalePct = Math.round(scale * 10000) / 100;
+        const destW = imgW * scalePct / 100;
+        const destH = imgH * scalePct / 100;
+        let y = Number(topY);
+        if (!isFinite(y)) y = 24;
+        y = Math.round(y);
+        if (y < 0) y = 0;
+        if (y + destH > canvasH) y = Math.max(0, Math.round(canvasH - destH));
+        return {
+            origin: 0,
+            x: 0,
+            y: y,
+            scaleX: scalePct,
+            scaleY: scalePct,
+            destW: destW,
+            destH: destH
+        };
+    }
+    /* MZQ_COMPUTE_QUIZ_PICTURE_LAYOUT_END */
+
+    window.MZQ_computeQuizPictureLayout = mzqComputeQuizPictureLayout;
+
+    function mzqRuntimeBox() {
+        const w = typeof Graphics !== 'undefined' && Graphics.boxWidth ? Graphics.boxWidth : 1024;
+        const h = typeof Graphics !== 'undefined' && Graphics.boxHeight ? Graphics.boxHeight : 768;
+        return { w: w, h: h };
+    }
+
+    function mzqShowFittedPicture(pictureId, name, layout, srcW, srcH) {
+        if (typeof $gameScreen === 'undefined' || !$gameScreen) return;
+        let scaleX = layout.scaleX;
+        let scaleY = layout.scaleY;
+        if (Number(srcW) > 0 && Number(srcH) > 0 && layout.destW > 0 && layout.destH > 0) {
+            scaleX = Math.round((layout.destW / srcW) * 10000) / 100;
+            scaleY = Math.round((layout.destH / srcH) * 10000) / 100;
+        }
+        $gameScreen.showPicture(
+            pictureId,
+            name,
+            0,
+            layout.x,
+            layout.y,
+            scaleX,
+            scaleY,
+            255,
+            0
+        );
+    }
+
+    function mzqApplyBackgroundFrame(layout) {
+        const bg = ImageManager.loadPicture('MZQ_picBG');
+        const apply = function () {
+            if (!bg || bg.isError()) return;
+            mzqShowFittedPicture(97, 'MZQ_picBG', layout, bg.width, bg.height);
+        };
+        if (bg.isReady()) apply();
+        else if (typeof bg.addLoadListener === 'function') bg.addLoadListener(apply);
+    }
+
+    function mzqApplyQuizPictureLayout(logicalPath, bitmap) {
+        const box = mzqRuntimeBox();
+        const srcW = bitmap && bitmap.width ? bitmap.width : 0;
+        const srcH = bitmap && bitmap.height ? bitmap.height : 0;
+        const layout = mzqComputeQuizPictureLayout(
+            srcW,
+            srcH,
+            box.w,
+            box.h,
+            quizPictureMaxWidthPercent,
+            quizPictureMaxHeightPercent,
+            quizPictureTopY
+        );
+        mzqShowFittedPicture(98, logicalPath, layout, srcW, srcH);
+        mzqApplyBackgroundFrame(layout);
+    }
+
+    function mzqWatchQuizPicture(bitmap, logicalPath, remaining, startedAt) {
+        if (bitmap && typeof bitmap.addLoadListener === 'function') {
+            bitmap.addLoadListener(function () {
+                if (bitmap.isReady() && !bitmap.isError()) {
+                    mzqHidePicErrorBanner();
+                    mzqApplyQuizPictureLayout(logicalPath, bitmap);
+                }
+            });
+        }
+        const tick = () => {
+            if (bitmap.isReady() && !bitmap.isError()) {
+                mzqHidePicErrorBanner();
+                mzqApplyQuizPictureLayout(logicalPath, bitmap);
+                return;
+            }
+            if (bitmap.isError()) {
+                mzqDiscardBrokenBitmap(bitmap);
+                if (remaining && remaining.length > 0) {
+                    const nextPath = remaining[0];
+                    const nextBitmap = ImageManager.loadPicture(nextPath);
+                    mzqWatchQuizPicture(nextBitmap, nextPath, remaining.slice(1), Date.now());
+                    return;
+                }
+                const url = bitmap.url || mzqPictureUrl(logicalPath);
+                mzqShowPicErrorBanner('題目圖片載入失敗：' + url);
+                return;
+            }
+            if (Date.now() - startedAt > 12000) {
+                const url = bitmap.url || mzqPictureUrl(logicalPath);
+                mzqShowPicErrorBanner('題目圖片載入逾時：' + url);
+                return;
+            }
+            setTimeout(tick, 200);
+        };
+        setTimeout(tick, 0);
+    }
+
+    function mzqShowQuizStemPicture(diff, lang, question) {
+        mzqHidePicErrorBanner();
+        ImageManager.loadPicture('MZQ_picBG');
+
+        let picName = '';
+        if (question.P_I && question.P_I !== 0 && question.P_I !== '0') picName = String(question.P_I);
+        else if (question.GUID) picName = String(question.GUID);
+        if (!picName) {
+            mzqShowPicErrorBanner('題目缺少圖片檔名（GUID / P_I 皆空）。');
+            return;
+        }
+        picName = picName.replace(/\.(png|jpg|jpeg)$/i, '');
+
+        const prefixes = mzqQuizPictureCandidates(diff, lang);
+        const paths = prefixes.map(prefix => prefix + picName);
+        const first = paths[0];
+        const bitmap = ImageManager.loadPicture(first);
+        mzqWatchQuizPicture(bitmap, first, paths.slice(1), Date.now());
+    }
 
     function mzqPartyHasPenalty() {
         if (!$gameParty.inBattle()) return false;
@@ -408,8 +706,7 @@
             typeof Scene_Battle !== 'undefined' &&
             scene instanceof Scene_Battle;
         if (isBattleMsg && scene.calcWindowHeight) {
-            const narrow =
-                quizPromptSubstring.length > 0 && text.indexOf(quizPromptSubstring) >= 0;
+            const narrow = mzqShouldNarrowQuizMessage(text);
             const lines = narrow ? quizMessageLineCount : 4;
             const ww = Graphics.boxWidth;
             const wh = scene.calcWindowHeight(lines, false) + 8;
@@ -458,44 +755,23 @@
         if (!lang || lang === 0) lang = 1;
 
         let categoryKey = 'Questions';
-        let folderPrefix = '';
 
         if (diff === 4) {
             categoryKey = 'TSA_ALL';
-            folderPrefix = '初中題庫/TSA/';
         } else {
             let diffStr = '';
-            let folderDiff = '';
-            if (diff === 1) {
-                diffStr = 'S1';
-                folderDiff = 'S1 AI 生成題目';
-            } else if (diff === 2) {
-                diffStr = 'S2';
-                folderDiff = 'S2 AI生成題目';
-            } else if (diff === 3) {
-                diffStr = 'S3';
-                folderDiff = 'S3 AI生成題目';
-            }
+            if (diff === 1) diffStr = 'S1';
+            else if (diff === 2) diffStr = 'S2';
+            else if (diff === 3) diffStr = 'S3';
             let langStr = '';
-            let folderLang = '';
-            if (lang === 1) {
-                langStr = 'CH';
-                folderLang = '中文題目';
-            } else if (lang === 2) {
-                langStr = 'EN';
-                folderLang = '英文題目';
-            }
+            if (lang === 1) langStr = 'CH';
+            else if (lang === 2) langStr = 'EN';
             if (diffStr !== '' && langStr !== '') {
                 categoryKey = diffStr + '_' + langStr;
-                folderPrefix = '初中題庫/' + folderDiff + '/' + folderLang + '/';
-            } else {
-                if (diff === 1) {
-                    categoryKey = 'S1MCQ';
-                    folderPrefix = 'S1MCQ/';
-                } else if (diff === 2) {
-                    categoryKey = 'S2MCQ';
-                    folderPrefix = 'S2MCQ/';
-                }
+            } else if (diff === 1) {
+                categoryKey = 'S1MCQ';
+            } else if (diff === 2) {
+                categoryKey = 'S2MCQ';
             }
         }
 
@@ -503,7 +779,6 @@
         if (!questionList) {
             if (questionDatabase.Questions) {
                 questionList = questionDatabase.Questions;
-                folderPrefix = '';
             } else {
                 $gameMessage.add('Error: No questions found for ' + categoryKey);
                 return;
@@ -572,17 +847,7 @@
             diff
         };
 
-        $gameScreen.showPicture(97, 'MZQ_picBG', 0, 0, 0, 100, 100, 255, 0);
-
-        let picName = '';
-        if (question.P_I && question.P_I !== 0 && question.P_I !== '0') picName = question.P_I;
-        else if (question.GUID) picName = question.GUID;
-
-        if (picName !== '') {
-            picName = picName.replace(/\.(png|jpg|jpeg)$/i, '');
-            const finalPath = folderPrefix + picName;
-            $gameScreen.showPicture(98, finalPath, 0, 0, 0, 100, 100, 255, 0);
-        }
+        mzqShowQuizStemPicture(diff, lang, question);
 
         let qText = question.Q;
         if (question.E === 1) qText = atob(rotHex(qText));
@@ -658,6 +923,7 @@
 
                 $gameScreen.erasePicture(97);
                 $gameScreen.erasePicture(98);
+                mzqHidePicErrorBanner();
             });
         }
     };
@@ -811,6 +1077,7 @@
         if ($gameSystem._mzqQuizState) {
             $gameSystem._mzqQuizState.battleWrongLock = null;
         }
+        mzqHidePicErrorBanner();
         _BattleManager_endBattle_MZQ.call(this, result);
     };
 

@@ -249,6 +249,12 @@ class NetworkManager {
         }
     }
 
+    static normalizeNickname(raw) {
+        return String(raw)
+            .toLowerCase()
+            .replace(/[\s\u3000\-_.*@#$%^&+=!?.,;:'"`~()[\]{}|\\/<>0-9！？。，、；：「」『』（）【】]/g, '');
+    }
+
     static validateNickname(raw) {
         if (raw === undefined || raw === null) {
             return { ok: false, message: '請輸入暱稱。', name: '' };
@@ -261,14 +267,22 @@ class NetworkManager {
         if (chars.length > 16) {
             return { ok: false, message: '暱稱請勿超過 16 個字元。', name: '' };
         }
-        const lower = name.toLowerCase();
+        const compact = this.normalizeNickname(name);
+        // Allow classroom names like Dick / Dickson; still block bigdick / fuk / 仆街.
+        const compactForCheck = compact.replace(/dickson/g, '');
+        if (compact === 'dick' || compactForCheck === '') {
+            return { ok: true, name, message: '' };
+        }
         const banned = [
-            'fuck', 'shit', 'damn', 'bitch', 'nazi', 'cunt', 'dick',
-            '干你', '操你', '屌', '肏', '白痴', '智障', '殺你', '去死', '媽的', '王八蛋'
+            'fuck', 'fuk', 'shit', 'damn', 'bitch', 'nazi', 'cunt', 'dick',
+            'asshole', 'bastard',
+            '干你', '操你', '屌', '肏', '白痴', '智障', '殺你', '去死', '媽的', '王八蛋',
+            '仆街', '撚', '柒', '他媽', '傻逼', '他媽的', '幹你', '雞掰', '機掰',
+            '婊子', '賤人', '白癡', '冚家鏟', '閪'
         ];
         for (let i = 0; i < banned.length; i++) {
-            const w = banned[i];
-            if (name.includes(w) || lower.includes(w.toLowerCase())) {
+            const wc = this.normalizeNickname(banned[i]);
+            if (wc && compactForCheck.includes(wc)) {
                 return { ok: false, message: '暱稱含有不當用語，請換一個。', name: '' };
             }
         }

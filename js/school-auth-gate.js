@@ -20,6 +20,9 @@
             }
             return adminEm;
         }
+        if (s && s.indexOf('@') === -1) {
+            s = s + '@' + (CFG.studentEmailDomain || 'ngwahsec.edu.hk');
+        }
         return s;
     }
 
@@ -285,10 +288,10 @@
         gate.innerHTML =
             '<div class="school-login-card">' +
             '<h1 class="school-login-title">TSA Training</h1>' +
-            '<p class="school-login-hint">請使用<strong>學校電郵</strong>登入（與校方派發相同，例：<code>s########@學校網域</code>）。<br>密碼為<strong>出生年月日</strong>共 8 碼（例：<code>YYYYMMDD</code>）。</p>' +
+            '<p class="school-login-hint">正式學生可用完整學校電郵，或只輸入 <code>@</code> 前部分（例：<code>s########</code>）。<br>後備帳可只輸入 <code>mathai01</code>（唔使電郵）＋指定密碼。<br>正式學生密碼為<strong>出生年月日</strong>共 8 碼（例：<code>YYYYMMDD</code>）。</p>' +
             '<p class="school-login-hint admin">管理員：電郵欄輸入 <code>admin</code>，使用校方提供之管理密碼。</p>' +
             '<label class="school-login-label">電郵</label>' +
-            '<input type="email" id="schoolLoginEmail" class="school-login-input" autocomplete="username" placeholder="s########@school.edu.hk" />' +
+            '<input type="text" id="schoolLoginEmail" class="school-login-input" autocomplete="username" inputmode="email" placeholder="mathai01 或 s########@學校網域" />' +
             '<label class="school-login-label">密碼（8 碼生日）</label>' +
             '<input type="password" id="schoolLoginPassword" class="school-login-input" autocomplete="current-password" />' +
             '<p id="schoolLoginError" class="school-login-error" style="display:none"></p>' +

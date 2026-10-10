@@ -1,5 +1,9 @@
 .DS_Store
 
+# 劇本提取稿（本機用，含未過濾對白，執行期不載入）
+data/CommonEvents_Script.txt
+data/劇本提取結果.txt
+
 # Editor / tool backups（勿上版控）
 *.bak-radar
 js/plugins/*.bak-*
@@ -10,3 +14,4 @@ tools/student_auth_passwords.csv
 js/school-auth-config.defaults.js
 tools/supabase_seed_nwcs_players.sql
 tools/.env.supabase.local
+__pycache__/

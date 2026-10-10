@@ -3,7 +3,7 @@
 var $plugins =
 [
 {"name":"TorigoyaMZ_EnemyHpBar","status":true,"description":"敵にHPバーを表示プラグイン (v.1.3.2)","parameters":{"base":"","basePosition":"top","basePosX":"0","basePosY":"0","customize":"","customizeCondition":"always","customizeGaugeWidth":"100","customizeGaugeHeight":"10","customizeDrawLabel":"true","customizeLabelWidth":"15","customizeLabelFontSize":"15","customizeValueFontSize":"15","customizeMaskHpValue":"?????"}},
-{"name":"MZQuizzer","status":true,"description":"[v1.5.0] Quiz Engine（多變／集中；答錯同一題；TSA 鎖題；逾時算錯）","parameters":{"penaltyStateId":"300","quizPromptSubstring":"請看題目圖片","quizMessageLineCount":"2","TsaLockVariableId":"988","correctCountVariableId":"993","wrongCountVariableId":"994","streakVariableId":"996","missStreakVariableId":"997","currentQuestionVariableId":"992","varietyModeVariableId":"0"}},
+{"name":"MZQuizzer","status":true,"description":"[v1.6.0] Quiz Engine（多變／集中；答錯同一題；TSA 鎖題；題圖自適應縮放）","parameters":{"penaltyStateId":"300","quizPromptSubstring":"請看題目圖片","quizMessageLineCount":"2","quizPictureMaxWidthPercent":"92","quizPictureMaxHeightPercent":"48","quizPictureTopY":"24","TsaLockVariableId":"988","correctCountVariableId":"993","wrongCountVariableId":"994","streakVariableId":"996","missStreakVariableId":"997","currentQuestionVariableId":"992","varietyModeVariableId":"0"}},
 {"name":"TowerShopTiers","status":true,"description":"[v1.0] Map65 商店進階／隱藏破爛與分類列","parameters":{"towerMapId":"65","levelThreshold":"50","priceMultiplier":"1.75"}},
 {"name":"TowerFloorDisplayName","status":true,"description":"無限之塔 Map65：地圖名稱顯示為「無限之塔 第N層」（預設變數202）","parameters":{"mapId":"98","floorVariableId":"202"}},
 {"name":"questionDatabase","status":true,"description":"","parameters":{}},

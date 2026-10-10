@@ -1,0 +1,89 @@
+{
+  "question_database": {
+    "disable_2A05": 200,
+    "fix_C": 1,
+    "fix_D": 1
+  },
+  "dialogue": {
+    "data/CommonEvents.json": [
+      {
+        "from": "彼母之劇情殺...",
+        "count": 1
+      },
+      {
+        "from": "我D)@!$*@#$_L@@#$(+!(*LQ&Y$M!Q@)C(",
+        "count": 1
+      },
+      {
+        "from": "如今城裡的百姓連九九乘法表都背不出來，簡直形",
+        "count": 1
+      },
+      {
+        "from": "同廢人！",
+        "count": 1
+      },
+      {
+        "from": "糞game",
+        "count": 1
+      },
+      {
+        "from": "數學腦殘粉",
+        "count": 1
+      },
+      {
+        "from": "是哪個混蛋幹的",
+        "count": 2
+      },
+      {
+        "from": "發動軍事政變的混蛋",
+        "count": 1
+      },
+      {
+        "from": "那個叫數地的混蛋",
+        "count": 2
+      },
+      {
+        "from": "這傢伙是哪來的神經病？",
+        "count": 1
+      },
+      {
+        "from": "既然 Boss 是個殘血的神經病",
+        "count": 1
+      },
+      {
+        "from": "聽懂了嗎？笨蛋。",
+        "count": 1
+      },
+      {
+        "from": "你這台鐵皮笨蛋！",
+        "count": 1
+      },
+      {
+        "from": "還有凱爾那個笨蛋",
+        "count": 1
+      },
+      {
+        "from": "揮劍毫無章法的笨蛋",
+        "count": 1
+      }
+    ],
+    "data/Map094.json": [
+      {
+        "from": "你他($%&@#(#*&$y*q....",
+        "count": 8
+      }
+    ],
+    "data/Map001.json": [
+      {
+        "from": "笨蛋！別隨便亂碰那個！",
+        "count": 2
+      }
+    ],
+    "data/Map035.json": [
+      {
+        "from": "數學白痴",
+        "count": 2
+      }
+    ]
+  }
+}

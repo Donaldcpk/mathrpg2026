@@ -90,6 +90,7 @@ def process_common_events(filepath, output_file):
         print(f"略過 CommonEvents.json: {e}")
 
 def main():
+    # Local extract only — do not commit; game runtime never loads this txt.
     output_filename = "劇本提取結果.txt"
     print("正在開始提取劇本...")
     
