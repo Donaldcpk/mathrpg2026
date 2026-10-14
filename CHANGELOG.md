@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- 登入畫面同時說明學生同老師：學生用 2026–27 內聯網帳號（`s` + 7 位）同出生日期 8 位；老師用 `nwcs` 帳號。密碼本體仍不寫入 Git。
+
 ### Added
 
 - `tools/verify_answer_key_alignment.py`：對齊官方 Answer Key S1–S3 與題庫，並回報 matched／fixed／still-disabled／sheet-vs-pic conflicts。

@@ -288,11 +288,11 @@
         gate.innerHTML =
             '<div class="school-login-card">' +
             '<h1 class="school-login-title">TSA Training</h1>' +
-            '<p class="school-login-hint">正式學生可用完整學校電郵，或只輸入 <code>@</code> 前部分（例：<code>s########</code>）。<br>後備帳可只輸入 <code>mathai01</code>（唔使電郵）＋指定密碼。<br>正式學生密碼為<strong>出生年月日</strong>共 8 碼（例：<code>YYYYMMDD</code>）。</p>' +
-            '<p class="school-login-hint admin">管理員：電郵欄輸入 <code>admin</code>，使用校方提供之管理密碼。</p>' +
-            '<label class="school-login-label">電郵</label>' +
-            '<input type="text" id="schoolLoginEmail" class="school-login-input" autocomplete="username" inputmode="email" placeholder="mathai01 或 s########@學校網域" />' +
-            '<label class="school-login-label">密碼（8 碼生日）</label>' +
+            '<p class="school-login-hint">學生：輸入內聯網帳號 <code>s</code> 加 7 位數字（例：<code>s2######</code>），唔使打全個電郵。<br>密碼係<strong>出生日期</strong> 8 位數字（例：2012 年 9 月 1 日輸入 <code>20120901</code>），唔好加 <code>s</code>。</p>' +
+            '<p class="school-login-hint admin">老師：輸入內聯網帳號 <code>nwcs</code> 加數字（例：<code>nwcs211</code>）。密碼由校方通知，同學生生日唔同。<br>後備帳可只輸入 <code>mathai01</code>。管理員輸入 <code>admin</code>。</p>' +
+            '<label class="school-login-label">電郵或內聯網帳號</label>' +
+            '<input type="text" id="schoolLoginEmail" class="school-login-input" autocomplete="username" inputmode="email" placeholder="s2###### 或 nwcs###" />' +
+            '<label class="school-login-label">密碼</label>' +
             '<input type="password" id="schoolLoginPassword" class="school-login-input" autocomplete="current-password" />' +
             '<p id="schoolLoginError" class="school-login-error" style="display:none"></p>' +
             '<button type="button" id="schoolLoginBtn" class="school-login-btn">登入並進入遊戲</button>' +
@@ -344,7 +344,7 @@
                         var msg2 = String(e2.message || e2 || '').toLowerCase();
                         if (msg2.indexOf('already') >= 0 || msg2.indexOf('registered') >= 0) {
                             throw new Error(
-                                '此電郵已註冊，請確認密碼是否為你的出生年月日（8 位數字，例：19980101）。'
+                                '此電郵已註冊。學生請用出生日期 8 位數字（例：20120901），唔好加 s。老師請用校方通知的密碼。'
                             );
                         }
                         throw new Error(
