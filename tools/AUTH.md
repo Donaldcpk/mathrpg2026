@@ -12,10 +12,13 @@
 
 | 類型 | 電郵 | 密碼 |
 |------|------|------|
-| 學生 | `s########@你的學校網域`，或只輸入 `@` 前部分 | 出生年月日 8 碼 |
+| 學生（2026–27） | 內聯網登入 `s` + 7 位，或 `s#######@ngwahsec.edu.hk` | 出生日期 8 碼（`YYYYMMDD`，唔好加 `s`） |
+| 老師（教職員-2627） | `nwcs###@ngwahsec.edu.hk`，畫面可只輸入 `nwcs###` | 校方遊戲密碼（勿寫入 Git；與學校電郵／O365 密碼不同） |
 | 後備帳 | 畫面可只輸入 `mathai01`（會補上學校網域） | 校方指定（勿寫入 Git） |
 | 管理員 | 校方指定管理員電郵；畫面可輸入 `admin` | 校方指定（環境變數 `NWCS_ADMIN_PASSWORD`） |
 | 舊 nwcs 測試帳（可選） | `nwcs###@…` | 環境變數 `NWCS_LEGACY_PASSWORD` |
+
+2026-10-14 已用 IT-Info「2627」分頁更新學生 Auth（659 人，密碼＝出生日期），並用「教職員-2627」開通校長、副校長、教師、教學助理（66 人，`is_admin`）。職員、社工、TSS 未開遊戲帳。真實密碼與名冊勿 commit。
 
 ## Provision（本機 only）
 
@@ -64,7 +67,8 @@ node tools/provision_supabase_auth_users.mjs --admins-only
 
 ## 登入畫面
 
-- 學生：完整學校電郵，或只輸入 `@` 前部分（閘門會補上 `studentEmailDomain`）+ 8 碼生日  
+- 學生：內聯網帳號 `s` + 7 位（閘門會補上 `studentEmailDomain`）+ 出生日期 8 碼  
+- 老師：內聯網帳號 `nwcs` + 數字 + 校方遊戲密碼  
 - 後備帳：只輸入 `mathai01`（唔使電郵；會變成 `mathai01@ngwahsec.edu.hk`）＋指定密碼  
 - 管理員：輸入 `admin` + 管理密碼  
 
